@@ -5,29 +5,19 @@ import Search from "../../components/Search";
 import * as S from "./styles";
 import Statistics from "../../components/Statistics";
 import ListSelectStudents from "../../components/ListSelectStudents";
+import { Button } from "react-bootstrap";
 
 function OldProcess() {
   return (
     <>
       <Header />
-
       <S.Container>
-        <h1 class="m-5">SELEÇÕES 2020.x</h1>
-        <S.CardProcessStyle>
-          <S.Col>
-            <Statistics />
-            <div>
-              <h4>EMITIR COMPROVANTE</h4>
-              <Search procura="Procurar por matricula" />
-            </div>
-          </S.Col>
-          <S.Col>
-            <ListSelectStudents />
-            <ListSelectStudents />
-            <ListSelectStudents />
-            <ListSelectStudents />
-          </S.Col>
-        </S.CardProcessStyle>
+        <h1 className="m-5">SELEÇÕES 2020.x</h1>
+
+        <ListSelectStudents />
+        <ListSelectStudents />
+        <ListSelectStudents />
+        <ListSelectStudents />
       </S.Container>
     </>
   );

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { Col, Button, Form, InputGroup, FormControl } from "react-bootstrap";
+import {
+  Col,
+  Button,
+  Form,
+  InputGroup,
+  FormControl,
+  Container,
+  Row,
+} from "react-bootstrap";
 import calendar from "../../assets/calendar.png";
 import add from "../../assets/add.png";
 import remove from "../../assets/remove.png";
 import * as S from "./styles";
 import InputMask from "react-input-mask";
 import moment from "moment";
+import CurrencyInput from "react-currency-input";
 
 class FormInfo extends React.Component {
   constructor(props) {
@@ -17,16 +26,16 @@ class FormInfo extends React.Component {
 
       count: 0,
       bolsa_se: [],
-      bolsa: [null],
+      bolsa: null,
 
       quantidade_se: [],
-      quantidade: [null],
+      quantidade: null,
 
       data_inicio_bolsa_se: [],
-      data_inicio_bolsa: [null],
+      data_inicio_bolsa: null,
 
       data_fim_bolsa_se: [],
-      data_fim_bolsa: [null],
+      data_fim_bolsa: null,
     };
 
     this.moradiaFamiliarCampus = null;
@@ -52,176 +61,129 @@ class FormInfo extends React.Component {
             onSubmit={this.handleSubmit}
           >
             <Form.Group>
-              <InputGroup className="inputCalendar">
+              <InputGroup className="inputCalendar m-0 p-0" md={5} as={Col}>
+                {/* <Col md={3}> */}
                 <FormControl
                   placeholder="dd-mm-aaaa"
                   name="data_inicio"
                   type="date"
                   min={moment().format("YYYY-MM-DD")}
                   onChange={this.handleChange}
+                  required
                 />
-
-                <InputGroup.Append>
-                  <InputGroup.Text id="basic-addon2">até</InputGroup.Text>
-                </InputGroup.Append>
+                {/* </Col> */}
+                <InputGroup.Text>até</InputGroup.Text>
+                {/* <Col md={3}> */}
                 <FormControl
+                  sm
                   placeholder="dd-mm-aaaa"
                   name="data_fim"
                   type="date"
                   min={moment(this.state.data_inicio).format("YYYY-MM-DD")}
                   onChange={this.handleChange}
+                  required
                 />
+                {/* </Col> */}
               </InputGroup>
             </Form.Group>
 
             <Form.Group>
               <Form.Label>TÍTULO DA SELEÇÃO</Form.Label>
-              <FormControl placeholder="Insira o título" />
+              <FormControl placeholder="Insira o título" required />
             </Form.Group>
             <Form.Label>BOLSAS OFERTADAS</Form.Label>
+            <InputGroup>
+              <Form.Group className="p-0 mr-2" md={5} as={Col}>
+                <FormControl
+                  placeholder="tipo bolsa"
+                  type="text"
+                  name="bolsa"
+                  value={this.state.bolsa}
+                  onChange={this.handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group>
+                <CurrencyInput
+                  className="form-control"
+                  name="quantidade"
+                  placeholder="quantidade"
+                  precision="0"
+                  value={this.state.quantidade}
+                  onChangeEvent={this.handleChange}
+                  required
+                />
+              </Form.Group>
 
-            {this.state.data_fim ? (
-              <>
-                <InputGroup className="mb-3">
-                  <Form.Row>
-                    <Form.Group as={Col}>
-                      <FormControl
-                        placeholder="tipo bolsa"
-                        name="bolsa"
-                        value={this.state.bolsa}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <FormControl
-                        as={InputMask}
-                        placeholder="quantidade"
-                        name="quantidade"
-                        mask="99"
-                        value={this.state.quantidade}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <FormControl
-                        name="data_inicio_bolsa"
-                        type="date"
-                        min={moment(this.state.data_inicio).format(
-                          "YYYY-MM-DD"
-                        )}
-                        max={moment(this.state.data_fim).format("YYYY-MM-DD")}
-                        value={this.state.data_inicio_bolsa}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <InputGroup.Text id="basic-addon2">até</InputGroup.Text>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <FormControl
-                        name="data_fim_bolsa"
-                        type="date"
-                        min={moment(this.state.data_inicio).format(
-                          "YYYY-MM-DD"
-                        )}
-                        max={moment(this.state.data_fim).format("YYYY-MM-DD")}
-                        value={this.state.data_fim_bolsa}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <Button
-                        className="buttonAdd"
-                        onClick={() =>
-                          this.setState({
-                            count: this.state.count + 1,
-                            bolsa_se: this.state.bolsa_se.concat(
-                              this.state.bolsa
-                            ),
-                            quantidade_se: this.state.quantidade_se.concat(
-                              this.state.quantidade
-                            ),
-                            data_inicio_bolsa_se: this.state.data_inicio_bolsa_se.concat(
-                              this.state.data_inicio_bolsa
-                            ),
-                            data_fim_bolsa_se: this.state.data_fim_bolsa_se.concat(
-                              this.state.data_fim_bolsa
-                            ),
-                          })
-                        }
-                      >
-                        <img src={add}></img>
-                      </Button>
-                    </Form.Group>
-                  </Form.Row>
-                </InputGroup>
-              </>
-            ) : null}
+              <Form.Group>
+                <Button
+                  className="buttonAdd"
+                  disabled={
+                    !!this.state.bolsa && this.state.quantidade ? false : true
+                  }
+                  onClick={() =>
+                    this.setState({
+                      count: this.state.count + 1,
+                      bolsa_se: this.state.bolsa_se.concat(this.state.bolsa),
+                      quantidade_se: this.state.quantidade_se.concat(
+                        this.state.quantidade
+                      ),
+                      data_inicio_bolsa_se: this.state.data_inicio_bolsa_se.concat(
+                        this.state.data_inicio_bolsa
+                      ),
+                      data_fim_bolsa_se: this.state.data_fim_bolsa_se.concat(
+                        this.state.data_fim_bolsa
+                      ),
 
+                      bolsa: [],
+                      quantidade: null,
+                      data_inicio_bolsa: [],
+                      data_fim_bolsa: [],
+                    })
+                  }
+                >
+                  <img src={add}></img>
+                </Button>
+              </Form.Group>
+            </InputGroup>
             {this.state.bolsa_se.map((currElement, index) => {
               return (
-                <InputGroup className="mb-3">
-                  <Form.Row>
-                    <Form.Group as={Col}>
-                      <FormControl placeholder={currElement} disabled />
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <FormControl
-                        placeholder={this.state.quantidade_se[index]}
-                        disabled
-                      />
-                    </Form.Group>
+                <InputGroup>
+                  <Form.Group className="p-0 mr-2" md={5} as={Col}>
+                    <FormControl placeholder={currElement} disabled />
+                  </Form.Group>
+                  <Form.Group>
+                    <FormControl
+                      placeholder={this.state.quantidade_se[index]}
+                      disabled
+                    />
+                  </Form.Group>
 
-                    <Form.Group as={Col}>
-                      <FormControl
-                        placeholder={moment(
-                          this.state.data_inicio_bolsa_se[index]
-                        ).format("L")}
-                        disabled
-                      />
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <InputGroup.Text id="basic-addon2">até</InputGroup.Text>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                      <FormControl
-                        placeholder={moment(
-                          this.state.data_fim_bolsa_se[index]
-                        ).format("L")}
-                        disabled
-                      />
-                    </Form.Group>
+                  <Form.Group>
+                    <Button
+                      className="buttonAdd"
+                      onClick={() =>
+                        this.setState({
+                          count: this.state.count - 1,
 
-                    <Form.Group as={Col}>
-                      <Button
-                        className="buttonAdd"
-                        onClick={() =>
-                          this.setState({
-                            count: this.state.count - 1,
-
-                            bolsa_se: this.state.bolsa_se.filter(
-                              (e, i) => i !== index
-                            ),
-                            quantidade_se: this.state.quantidade_se.filter(
-                              (e, i) => i !== index
-                            ),
-                            data_inicio_bolsa_se: this.state.data_inicio_bolsa_se.filter(
-                              (e, i) => i !== index
-                            ),
-                            data_fim_bolsa_se: this.state.data_fim_bolsa_se.filter(
-                              (e, i) => i !== index
-                            ),
-                          })
-                        }
-                      >
-                        <img src={remove}></img>
-                      </Button>
-                    </Form.Group>
-                  </Form.Row>
+                          bolsa_se: this.state.bolsa_se.filter(
+                            (e, i) => i !== index
+                          ),
+                          quantidade_se: this.state.quantidade_se.filter(
+                            (e, i) => i !== index
+                          ),
+                          data_inicio_bolsa_se: this.state.data_inicio_bolsa_se.filter(
+                            (e, i) => i !== index
+                          ),
+                          data_fim_bolsa_se: this.state.data_fim_bolsa_se.filter(
+                            (e, i) => i !== index
+                          ),
+                        })
+                      }
+                    >
+                      <img src={remove}></img>
+                    </Button>
+                  </Form.Group>
                 </InputGroup>
               );
             })}

@@ -5,23 +5,24 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin: 100px;
+  width: 100%;
+  padding: 100px;
 
   img {
     width: 35px;
     height: 35px;
-    padding: 2px;
+    margin: 2px;
   }
 
-  .inputCalendar {
-    width: 500px;
-    margin: 5px;
+  .upload-button {
+    border-color: none;
+    background: none;
+  }
+
+  Button {
     margin-left: auto;
   }
 
-  .Button {
-    margin-left: auto;
-  }
   .buttonAdd {
     background: none;
     border: none;

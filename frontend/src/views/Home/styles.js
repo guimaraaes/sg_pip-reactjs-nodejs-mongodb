@@ -5,6 +5,14 @@ export const SearchStyle = styled.div`
 
   justify-content: flex-end;
 `;
+
+export const Head = styled.div`
+  display: flex;
+  align-items: baseline;
+
+  justify-content: space-between;
+`;
+
 export const Container = styled.div`
   flex-wrap: wrap;
   display: flex;

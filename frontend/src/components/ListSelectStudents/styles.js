@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   flex-direction: column;
-  margin: 10px;
   display: flex;
-  align-items: flex-end;
-  padding-right: 100px;
+
+  align-items: center;
+
   div {
     background: ${(props) => props.color};
   }
