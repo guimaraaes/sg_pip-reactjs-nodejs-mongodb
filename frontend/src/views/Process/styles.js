@@ -5,9 +5,9 @@ export const Container = styled.div`
   flex-wrap: wrap;
 
   flex-direction: column;
-  align-items: space-around;
 
-  padding: 100px;
+  backgroun: red;
+  padding: 40px;
 `;
 
 export const GroupStudentsContainer = styled.div`
@@ -16,8 +16,9 @@ export const GroupStudentsContainer = styled.div`
 
   flex-wrap: wrap;
 `;
-export const SearchStyle = styled.div`
+export const Head = styled.div`
   display: flex;
+  align-items: baseline;
 
-  justify-content: flex-end;
+  justify-content: space-between;
 `;

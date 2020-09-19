@@ -12,10 +12,10 @@ function Process(props) {
       <Header />
 
       <S.Container>
-        <h1 class="">SELEÇÃO x</h1>
-        <S.SearchStyle>
+        <S.Head className="mb-5">
+          <h1>SELEÇÃO x</h1>
           <Search procura="Procurar por aluno" />
-        </S.SearchStyle>
+        </S.Head>
 
         <GroupStudents
           color="#D9534F"

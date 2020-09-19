@@ -12,7 +12,7 @@ function OldProcess() {
     <>
       <Header />
       <S.Container>
-        <h1 className="m-5">SELEÇÕES 2020.x</h1>
+        <h1>SELEÇÕES 2020.x</h1>
 
         <ListSelectStudents />
         <ListSelectStudents />

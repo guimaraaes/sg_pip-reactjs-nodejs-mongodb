@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: space-around;
 
-  margin: 100px;
+  padding: 40px;
 `;
 export const CardProcessStyle = styled.div`
   display: flex;

@@ -11,15 +11,12 @@ function CardProcess(props) {
           as={Button}
           variant="light"
           href={props.href}
-          className="m-2"
-          style={{ width: "18rem" }}
+          className="m-3"
+          style={{ width: "20rem" }}
         >
           <Card.Header variant="top">2020.x {props.href}</Card.Header>
           <Card.Body>
-            <Card.Text>
-              alunos inscritos: xx. bolsas ofertadas: xx. bolsas ofertadas: xx.
-              bolsas ofertadas: xx. bolsas ofertadas: xx. bolsas ofertadas: xx.
-            </Card.Text>
+            <Card.Text>alunos inscritos: xx. bolsas ofertadas: xx.</Card.Text>
           </Card.Body>
         </Card>
       </S.Container>

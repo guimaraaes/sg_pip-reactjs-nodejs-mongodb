@@ -6,7 +6,7 @@ import * as S from "./styles";
 import { Pagination } from "react-bootstrap";
 
 function Home() {
-  const b = [1, 10, 100];
+  const b = [1, 10, 100, 1, 10, 100, 100];
   const a = [1, 10, 100, 1000, 10000];
 
   return (
@@ -15,7 +15,7 @@ function Home() {
 
       <S.Container>
         <S.Head>
-          <h1 class="m-5">SELEÇÕES </h1>
+          <h1>SELEÇÕES </h1>
           <Search procura="Procurar por seleção" />
         </S.Head>
 
@@ -24,7 +24,7 @@ function Home() {
           <Search procura="Procurar por matricula" />
         </S.SearchStyle> */}
 
-        <S.CardProcessStyle>
+        <S.CardProcessStyle className="m-3">
           {b.map((i) => {
             return <CardProcess href="/process" />;
           })}
@@ -33,20 +33,15 @@ function Home() {
             return <CardProcess href="/old-process" />;
           })}
         </S.CardProcessStyle>
-        <Pagination>
+        <Pagination className="ml-5">
           <Pagination.First />
           <Pagination.Prev />
           <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Ellipsis />
 
-          <Pagination.Item>{10}</Pagination.Item>
-          <Pagination.Item>{11}</Pagination.Item>
-          <Pagination.Item active>{12}</Pagination.Item>
-          <Pagination.Item>{13}</Pagination.Item>
-          <Pagination.Item disabled>{14}</Pagination.Item>
+          <Pagination.Item active>{2}</Pagination.Item>
+          <Pagination.Item>{3}</Pagination.Item>
 
           <Pagination.Ellipsis />
-          <Pagination.Item>{20}</Pagination.Item>
           <Pagination.Next />
           <Pagination.Last />
         </Pagination>

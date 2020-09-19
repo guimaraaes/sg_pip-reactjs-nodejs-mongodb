@@ -9,7 +9,7 @@ class GroupStudents extends React.Component {
     return (
       <>
         <S.Container color={this.props.color} colorHead={this.props.colorHead}>
-          <div class="card" style={{ width: "50%" }}>
+          <div class="card" style={{ width: "70%" }}>
             <div class="card-header Head">
               ALUNOS TIPO DE CADASTRO{" "}
               {this.props.alert ? (

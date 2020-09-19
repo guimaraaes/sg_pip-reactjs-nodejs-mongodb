@@ -4,7 +4,7 @@ import { Form, FormControl, Button } from "react-bootstrap";
 function Search(props) {
   return (
     <>
-      <Form className="mb-3" inline>
+      <Form inline>
         <FormControl
           class="mb-4"
           type="text"
