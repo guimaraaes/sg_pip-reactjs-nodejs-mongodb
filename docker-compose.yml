@@ -1,0 +1,77 @@
+version: '3'
+services: 
+    backend:
+        image: node:alpine
+        # build: ./backend/
+        # stdin_open: true
+        container_name: backend
+        # restart: always
+        # environment:
+        #     - HOST=mongo
+        volumes: 
+            - ./backend:/backend
+        working_dir: /backend
+        command: npm install
+        # command: npm install -g nodemon --save
+        command: npm start
+        ports:
+            - "9000:9000"
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        environment:
+            # - NODE_ENV=development
+            # - HOST=mongo
+            - CHOKIDAR_USEPOLLING=true
+    frontend:
+        image: node:alpine
+        # restart: always
+        # build: ./frontend/
+            # dockerfile: Dockerfile
+        stdin_open: true
+        container_name: frontend
+        volumes: 
+            - ./frontend:/frontend
+        working_dir: /frontend
+        command: npm install
+        command: npm start
+        ports:
+            - "3000:3000" 
+        environment:
+            # - NODE_ENV=development
+            - CHOKIDAR_USEPOLLING=true
+        depends_on: 
+            - backend
+    mongo-express:
+        image: mongo-express
+        ports:
+            - 8081:8081
+        environment:
+            - DB_HOST=db
+            - DB_PORT=27017
+        #     ME_CONFIG_BASICAUTH_USERNAME: root
+        #     ME_CONFIG_BASICAUTH_PASSWORD: MongoExpress2019!
+        #     ME_CONFIG_MONGODB_PORT: 27017
+        #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+        #     ME_CONFIG_MONGODB_ADMINPASSWORD: MongoDB2019!
+        depends_on: 
+            - mongo
+        # networks:
+        #     - mongo-compose-network
+    mongo:
+        image: mongo
+        # container_name: mongo
+        ports:
+            - '27017:27017'
+        # environment:
+        #     MONGO_INITDB_ROOT_USERNAME: root
+        #     MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+        volumes:
+            - ./data:/data/db
+#         networks:
+#             - mongo-compose-network
+
+# networks: 
+#     mongo-compose-network:
+#         driver: bridge

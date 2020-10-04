@@ -6,19 +6,19 @@ const ProcessController = require("../api/controllers/ProcessController");
 
 /**
  * @swagger
- * /process:
+ * /studentRequest:
  *   get:
  *     tags:
- *       - Process
+ *       - StudentRequest
  *     description: Pesquisar por todos os processos
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: Todos os processo
+ *         description: Todas as solicitações
  *         schema:
  *          type: object
- *          $ref: '#/definitions/Process'
+ *          $ref: '#/definitions/StudentRequest'
  *       500:
  *         description: SERVER ERROR
  */
@@ -26,22 +26,22 @@ router.get("/", ProcessController.all);
 
 /**
  * @swagger
- * /process/{id}:
+ * /studentRequest/{id}:
  *   get:
  *     tags:
- *       - Process
- *     description: Pesquisar por um processo
+ *       - StudentRequest
+ *     description: Pesquisar por uma solicitação
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: nome
- *         description: Nome do processo
+ *         description: Nome do estudante
  *         in: path
  *         required: true
  *         type: string
  *     responses:
  *       200:
- *         description: Processo pesquisado
+ *         description: Solicitação pesquisada
  *       500:
  *         description: SERVER ERROR
  */
@@ -49,71 +49,50 @@ router.get("/:id", ProcessController.all);
 
 /**
  * @swagger
- * /process:
+ * /studentRequest:
  *   post:
  *     tags:
- *       - Process
+ *       - StudentRequest
  *     description: Criar um processo
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: Processo
+ *       - name: Solicitação do Estudante
  *         description: Modelo do processo
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Process'
+ *           $ref: '#/definitions/StudentRequest'
  *     responses:
  *       200:
- *         description: Processo criado
+ *         description: Solicitação realizada
  */
 router.post("/", ProcessController.create);
 
 /**
  * @swagger
- * /process/{id}:
+ * /studentRequest/{id}:
  *   put:
  *     tags:
- *       - Process
- *     description: Editar um processo
+ *       - StudentRequest
+ *     description: Editar uma solicitação
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: nome
- *         description: Nome do processo
+ *         description: Nome do aluno
  *         in: path
  *         required: true
  *         type: string
- *       - name: Process
- *         description: Modelo do processo
+ *       - name: Solicitação do Estudante
+ *         description: Modelo da solicitação
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Process'
+ *           $ref: '#/definitions/StudentRequest'
  *     responses:
  *       200:
- *         description: Processo editado
- */
-router.post("/", ProcessController.create);
-
-/**
- * @swagger
- * /process/{id}:
- *   delete:
- *     tags:
- *       - Process
- *     description: Deletar um processo
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: nome
- *         description: nome do processo
- *         in: path
- *         required: true
- *         type: string
- *     responses:
- *       200:
- *         description: Processo deletado
+ *         description: Solicitação realizada
  */
 router.post("/", ProcessController.create);
 

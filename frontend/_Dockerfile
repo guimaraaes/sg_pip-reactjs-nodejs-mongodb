@@ -1,0 +1,12 @@
+# get the base node image
+FROM node:alpine 
+
+RUN mkdir /frontend
+WORKDIR /frontend
+COPY package.json /frontend
+RUN npm install
+
+COPY . /frontend
+# RUN npm start
+EXPOSE 3000
+CMD [ "npm" , "run", "start" ]

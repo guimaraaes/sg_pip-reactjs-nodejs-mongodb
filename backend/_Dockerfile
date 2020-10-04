@@ -1,0 +1,20 @@
+FROM node:alpine
+
+RUN mkdir /backend
+WORKDIR /backend/
+# WORKDIR /usr/src/app
+
+COPY package.json /backend
+RUN npm install
+COPY . /backend
+# # Create app directory
+# WORKDIR /backend
+# # Install app dependencies
+# COPY package*.json ./
+# RUN npm install
+# # Bundle app source
+# COPY . .
+
+EXPOSE 9000
+# CMD [ "npm", "start" ]
+CMD [ "node", "src/index.js" ]

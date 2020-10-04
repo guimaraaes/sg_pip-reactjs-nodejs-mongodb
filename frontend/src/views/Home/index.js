@@ -6,8 +6,8 @@ import * as S from "./styles";
 import { Pagination } from "react-bootstrap";
 
 function Home() {
-  const b = [1, 10, 100, 1, 10, 100, 100];
-  const a = [1, 10, 100, 1000, 10000];
+  const b = [1, 10, 100];
+  const a = [1, 10, 100];
 
   return (
     <>
