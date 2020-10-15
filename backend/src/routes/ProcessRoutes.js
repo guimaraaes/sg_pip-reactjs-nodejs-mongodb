@@ -24,6 +24,27 @@ const ProcessController = require("../api/controllers/ProcessController");
  */
 router.get("/", ProcessController.all);
 
+
+/**
+ * @swagger
+ * /process_new:
+ *   get:
+ *     tags:
+ *       - Process
+ *     description: Pesquisar por todos os processos
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Todos os processo
+ *         schema:
+ *          type: object
+ *          $ref: '#/definitions/Process'
+ *       500:
+ *         description: SERVER ERROR
+ */
+router.get("/", ProcessController.newProcess);
+
 /**
  * @swagger
  * /process/{id}:
@@ -49,7 +70,7 @@ router.get("/:id", ProcessController.all);
 
 /**
  * @swagger
- * /process:
+ * /process_new:
  *   post:
  *     tags:
  *       - Process

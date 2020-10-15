@@ -2,33 +2,51 @@ import React from "react";
 import { Dropdown, DropdownButton, Table, Button } from "react-bootstrap";
 import Search from "../Search";
 import * as S from "./styles";
-import alert from "../../assets/alert.png";
 
 class GroupStudents extends React.Component {
   render() {
     return (
       <>
-        <S.Container color={this.props.color} colorHead={this.props.colorHead}>
+        <S.Container color={this.props.color} >
           <div class="card" style={{ width: "70%" }}>
             <div class="card-header Head">
-              ALUNOS TIPO DE CADASTRO{" "}
-              {this.props.alert ? (
-                <button>
-                  {" "}
-                  <img src={alert}></img>{" "}
-                </button>
-              ) : null}
+                
             </div>
             <ul class="list-group list-group-flush">
-              <a
-                class="list-group-item text-dark btn "
-                href={this.props.href}
-                color={this.props.procura}
+            <a
+                class="list-group-item btn "
+                href={this.props.href + "?1"}
+                color={this.props.color}
               >
                 MATRICULA NOME
               </a>
-
-              <p class="list-group-item text-dark text-center">mais x alunos</p>
+              <a
+                class="list-group-item btn "
+                href={this.props.href}
+                color={this.props.color}
+              >
+                MATRICULA NOME
+              </a>
+              <a
+                class="list-group-item btn "
+                href={this.props.href}
+                color={this.props.color}
+              >
+                MATRICULA NOME
+              </a>
+              <a
+                class="list-group-item btn "
+                href={this.props.href}
+              >
+                MATRICULA NOME
+              </a>
+              <a
+                class="list-group-item btn "
+                href={this.props.href}
+                color={"#D9534F"}
+              >
+                MATRICULA NOME
+              </a>
             </ul>
           </div>
         </S.Container>

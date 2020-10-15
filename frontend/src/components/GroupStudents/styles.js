@@ -23,6 +23,7 @@ export const Container = styled.div`
     }
   }
   a {
+    color: ${(props) => props.color};
     &:hover {
       background: ${(props) => props.color};
     }

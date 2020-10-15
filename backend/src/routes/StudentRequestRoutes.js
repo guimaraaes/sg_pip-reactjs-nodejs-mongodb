@@ -24,6 +24,7 @@ const ProcessController = require("../api/controllers/ProcessController");
  */
 router.get("/", ProcessController.all);
 
+
 /**
  * @swagger
  * /studentRequest/{id}:
@@ -95,5 +96,4 @@ router.post("/", ProcessController.create);
  *         description: Solicitação realizada
  */
 router.post("/", ProcessController.create);
-
 module.exports = router;

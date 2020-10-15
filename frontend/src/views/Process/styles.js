@@ -8,6 +8,8 @@ export const Container = styled.div`
 
   backgroun: red;
   padding: 40px;
+  
+
 `;
 
 export const GroupStudentsContainer = styled.div`
@@ -19,6 +21,18 @@ export const GroupStudentsContainer = styled.div`
 export const Head = styled.div`
   display: flex;
   align-items: baseline;
-
+  
   justify-content: space-between;
+  button {
+    background-color: none;
+    border: none;
+  }
+  @media screen and ( max-width: 700px ) {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+  }
+  a{ 
+    color: black;
+  }
 `;

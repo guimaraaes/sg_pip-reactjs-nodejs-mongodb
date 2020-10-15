@@ -5,19 +5,24 @@ import Search from "../../components/Search";
 import * as S from "./styles";
 import Statistics from "../../components/Statistics";
 import ListSelectStudents from "../../components/ListSelectStudents";
-import { Button } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 function OldProcess() {
   return (
     <>
       <Header />
       <S.Container>
-        <h1>SELEÇÕES 2020.x</h1>
+        <S.Head className="mb-5">
 
+          <h1>SELEÇÕES 2020.x</h1>
+          <Row>Data de início: - Data fim: </Row>
+
+        </S.Head>
         <ListSelectStudents />
         <ListSelectStudents />
         <ListSelectStudents />
         <ListSelectStudents />
+
       </S.Container>
     </>
   );

@@ -6,7 +6,7 @@ import * as S from "./styles";
 function ListSelectStudents(props) {
   return (
     <>
-      <S.Container className="mb-5" color={props.color}>
+      <S.Container className="" color={props.color}>
         <div class="card" style={{ width: "70%" }}>
           <div className="title" class="card-header">
             BOLSAS x

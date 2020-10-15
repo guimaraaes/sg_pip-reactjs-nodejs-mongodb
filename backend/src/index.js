@@ -48,6 +48,31 @@ const swaggerOptions = {
             "name": "Process"
         },
       },
+      "StudentLogin": {
+        "type": "object",
+        "properties": {
+            "token": {"type": "string" },
+            "name": {"type": "string" },
+            "course": {"type": "string"},
+            "IRA": {"type": "string"},
+            "disapproval": {"type": "boolean"},
+            "quantity_subjects": {"type": "number"}, 
+        },
+        "xml": {
+            "name": "Process"
+        },
+      },
+      "CoordinatorLogin": {
+        "type": "object",
+        "properties": {
+            "token": {"type": "string" },
+            "name": {"type": "string" },
+            "office": {"type": "string" },
+        },
+        "xml": {
+            "name": "Process"
+        },
+      },
   },
   },
   apis: ["src/routes/*.js"],

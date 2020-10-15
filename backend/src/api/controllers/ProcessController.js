@@ -16,6 +16,10 @@ class ProcessController {
   all(req, res) {
     return res.status(200).send("Successfully   customer");
   }
+
+  newProcess(req, res) {
+    return res.status(200).send("Successfully   customer");
+  }
 }
 
 module.exports = new ProcessController();
