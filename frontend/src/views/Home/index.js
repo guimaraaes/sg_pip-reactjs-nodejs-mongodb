@@ -5,6 +5,7 @@ import Search from "../../components/Search";
 import * as S from "./styles";
 import { Pagination, Row } from "react-bootstrap";
 import lupa from "../../assets/lupa.png";
+import lupauser from "../../assets/lupauser.png";
 import add from "../../assets/add.png";
 
 
@@ -47,6 +48,9 @@ class Home extends React.Component {
 
               <button class='mr-3' onClick={() => this.setState({ a: !this.state.a })}>
                 <img src={lupa}></img>
+              </button>
+              <button class='mr-3' onClick={() => this.setState({ a: !this.state.a })}>
+                <img src={lupauser}></img>
               </button>
               <button >
                 <a href='/new-process'> cadastrar <img src={add}></img> </a>

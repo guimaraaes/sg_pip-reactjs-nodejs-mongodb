@@ -3,6 +3,7 @@ const router = express.Router();
 var Process = require('../api/models/ProcessModel.js')
 
 const ProcessController = require("../api/controllers/ProcessController");
+const ProcessValidation = require("../api/middlewares/ProcessValidation");
 
 /**
  * @swagger
@@ -15,35 +16,13 @@ const ProcessController = require("../api/controllers/ProcessController");
  *       - application/json
  *     responses:
  *       200:
- *         description: Todos os processo
  *         schema:
  *          type: object
  *          $ref: '#/definitions/Process'
  *       500:
  *         description: SERVER ERROR
  */
-router.get("/", ProcessController.all);
-
-
-/**
- * @swagger
- * /process_new:
- *   get:
- *     tags:
- *       - Process
- *     description: Pesquisar por todos os processos
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Todos os processo
- *         schema:
- *          type: object
- *          $ref: '#/definitions/Process'
- *       500:
- *         description: SERVER ERROR
- */
-router.get("/", ProcessController.newProcess);
+router.get("/", ProcessController.All);
 
 /**
  * @swagger
@@ -51,30 +30,58 @@ router.get("/", ProcessController.newProcess);
  *   get:
  *     tags:
  *       - Process
- *     description: Pesquisar por um processo
+ *     description: Buscar um processo pelo id
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: nome
- *         description: Nome do processo
+ *       - name: id
+ *         description: Id do processo
  *         in: path
  *         required: true
  *         type: string
  *     responses:
  *       200:
- *         description: Processo pesquisado
+ *         schema:
+ *          type: object
+ *          $ref: '#/definitions/Process'
  *       500:
  *         description: SERVER ERROR
  */
-router.get("/:id", ProcessController.all);
+router.get("/:id", ProcessController.GetId);
 
 /**
  * @swagger
- * /process_new:
+ * /process/result_search/{title}:
+ *   get:
+ *     tags:
+ *       - Process
+ *     description: Buscar um processo pelo título
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: title
+ *         description: título do processo
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         schema:
+ *          type: object
+ *          $ref: '#/definitions/Process'
+ *       500:
+ *         description: SERVER ERROR
+ */
+router.get("/result_search/:title", ProcessController.GetTitle);
+
+
+/**
+ * @swagger
+ * /process:
  *   post:
  *     tags:
  *       - Process
- *     description: Criar um processo
+ *     description: Criar um novo processo
  *     produces:
  *       - application/json
  *     parameters:
@@ -86,9 +93,14 @@ router.get("/:id", ProcessController.all);
  *           $ref: '#/definitions/Process'
  *     responses:
  *       200:
- *         description: Processo criado
+ *         schema:
+ *          type: object
+ *          $ref: '#/definitions/Process'
+ *       500:
+ *         description: SERVER ERROR
  */
-router.post("/", ProcessController.create);
+router.post("/", ProcessValidation, ProcessController.Create);
+
 
 /**
  * @swagger
@@ -100,12 +112,12 @@ router.post("/", ProcessController.create);
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: nome
- *         description: Nome do processo
+ *       - name: id
+ *         description: id do processo
  *         in: path
  *         required: true
  *         type: string
- *       - name: Process
+ *       - name: Processo
  *         description: Modelo do processo
  *         in: body
  *         required: true
@@ -115,7 +127,7 @@ router.post("/", ProcessController.create);
  *       200:
  *         description: Processo editado
  */
-router.post("/", ProcessController.create);
+router.put("/:id", ProcessValidation, ProcessController.Edit);
 
 /**
  * @swagger
@@ -127,8 +139,8 @@ router.post("/", ProcessController.create);
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: nome
- *         description: nome do processo
+ *       - name: id
+ *         description: id do processo
  *         in: path
  *         required: true
  *         type: string
@@ -136,6 +148,6 @@ router.post("/", ProcessController.create);
  *       200:
  *         description: Processo deletado
  */
-router.post("/", ProcessController.create);
+router.delete("/:id", ProcessController.Delete);
 
 module.exports = router;

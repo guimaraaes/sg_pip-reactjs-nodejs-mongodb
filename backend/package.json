@@ -11,8 +11,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "date-fns": "^2.16.1",
     "express": "^4.17.1",
     "mongoose": "^5.10.3",
+    "paginate-info": "^1.0.4",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"
   },

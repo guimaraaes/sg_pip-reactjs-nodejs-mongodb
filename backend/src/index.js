@@ -29,7 +29,7 @@ const swaggerOptions = {
             "name": "Process"
         },
       },
-      "StudentRequest": {
+      "Student_request": {
         "type": "object",
         "properties": {
             "name": {"type": "string" },
@@ -79,11 +79,12 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-
 const ProcessRoutes = require("./routes/ProcessRoutes");
+const StudentRequestRoutes = require("./routes/StudentRequestRoutes");
+
+server.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 server.use("/process", ProcessRoutes);
+server.use("/student_request", StudentRequestRoutes);
 
 server.listen(9000, () => {
   console.log("api");
