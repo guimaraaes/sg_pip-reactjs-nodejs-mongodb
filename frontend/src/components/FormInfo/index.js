@@ -1,47 +1,34 @@
-import React, { useState } from "react";
-import {
-  Col,
-  Button,
-  Form,
-  InputGroup,
-  FormControl,
-  Container,
-  Row,
-} from "react-bootstrap";
-import calendar from "../../assets/calendar.png";
+import moment from "moment";
+import React from "react";
+import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
+import CurrencyInput from "react-currency-input";
 import add from "../../assets/add.png";
 import remove from "../../assets/remove.png";
+import api from "../../services/api";
 import * as S from "./styles";
-import InputMask from "react-input-mask";
-import moment from "moment";
-import CurrencyInput from "react-currency-input";
 
 class FormInfo extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data_inicio: null,
-      data_fim: null,
-
+      aid: null,
+      quantity: null,
       count: 0,
-      bolsa_se: [],
-      bolsa: null,
-
-      quantidade_se: [],
-      quantidade: null,
-
-      data_inicio_bolsa_se: [],
-      data_inicio_bolsa: null,
-
-      data_fim_bolsa_se: [],
-      data_fim_bolsa: null,
+      aid_id: [],
+      aid_name: [],
+      aid_quantity: [],
+      title: null,
+      inprogress: true,
+      date_begin: null,
+      date_end: null,
     };
 
     this.moradiaFamiliarCampus = null;
     this.validated = 1;
 
     this.handleChange = this.handleChange.bind(this);
+    this.Save = this.Save.bind(this);
   }
 
   handleChange(event) {
@@ -50,7 +37,17 @@ class FormInfo extends React.Component {
       [event.target.name]: value,
     });
   }
-
+  async Save() {
+    await api.post("/process", {
+      aid_id: this.state.aid_id,
+      aid_name: this.state.aid_name,
+      aid_quantity: this.state.aid_quantity,
+      title: this.state.title,
+      inprogress: true,
+      date_begin: this.state.date_begin,
+      date_end: this.state.date_end,
+    });
+  }
   render() {
     return (
       <>
@@ -65,7 +62,7 @@ class FormInfo extends React.Component {
                 {/* <Col md={3}> */}
                 <FormControl
                   placeholder="dd-mm-aaaa"
-                  name="data_inicio"
+                  name="date_begin"
                   type="date"
                   min={moment().format("YYYY-MM-DD")}
                   onChange={this.handleChange}
@@ -77,9 +74,9 @@ class FormInfo extends React.Component {
                 <FormControl
                   sm
                   placeholder="dd-mm-aaaa"
-                  name="data_fim"
+                  name="date_end"
                   type="date"
-                  min={moment(this.state.data_inicio).format("YYYY-MM-DD")}
+                  min={moment(this.state.date_begin).format("YYYY-MM-DD")}
                   onChange={this.handleChange}
                   required
                 />
@@ -89,7 +86,13 @@ class FormInfo extends React.Component {
 
             <Form.Group>
               <Form.Label>TÍTULO DA SELEÇÃO</Form.Label>
-              <FormControl placeholder="Insira o título" required />
+              <FormControl
+                placeholder="Insira o título"
+                name="title"
+                value={this.state.title}
+                onChange={this.handleChange}
+                required
+              />
             </Form.Group>
             <Form.Label>BOLSAS OFERTADAS</Form.Label>
             <InputGroup>
@@ -97,8 +100,8 @@ class FormInfo extends React.Component {
                 <FormControl
                   placeholder="tipo bolsa"
                   type="text"
-                  name="bolsa"
-                  value={this.state.bolsa}
+                  name="aid"
+                  value={this.state.aid}
                   onChange={this.handleChange}
                   required
                 />
@@ -106,10 +109,10 @@ class FormInfo extends React.Component {
               <Form.Group>
                 <CurrencyInput
                   className="form-control"
-                  name="quantidade"
+                  name="quantity"
                   placeholder="quantidade"
                   precision="0"
-                  value={this.state.quantidade}
+                  value={this.state.quantity}
                   onChangeEvent={this.handleChange}
                   required
                 />
@@ -119,26 +122,18 @@ class FormInfo extends React.Component {
                 <Button
                   className="buttonAdd"
                   disabled={
-                    !!this.state.bolsa && this.state.quantidade ? false : true
+                    !!this.state.aid && this.state.quantity ? false : true
                   }
                   onClick={() =>
                     this.setState({
                       count: this.state.count + 1,
-                      bolsa_se: this.state.bolsa_se.concat(this.state.bolsa),
-                      quantidade_se: this.state.quantidade_se.concat(
-                        this.state.quantidade
-                      ),
-                      data_inicio_bolsa_se: this.state.data_inicio_bolsa_se.concat(
-                        this.state.data_inicio_bolsa
-                      ),
-                      data_fim_bolsa_se: this.state.data_fim_bolsa_se.concat(
-                        this.state.data_fim_bolsa
+                      aid_name: this.state.aid_name.concat(this.state.aid),
+                      aid_quantity: this.state.aid_quantity.concat(
+                        this.state.quantity
                       ),
 
-                      bolsa: [],
-                      quantidade: null,
-                      data_inicio_bolsa: [],
-                      data_fim_bolsa: [],
+                      aid: [],
+                      quantity: null,
                     })
                   }
                 >
@@ -146,7 +141,7 @@ class FormInfo extends React.Component {
                 </Button>
               </Form.Group>
             </InputGroup>
-            {this.state.bolsa_se.map((currElement, index) => {
+            {this.state.aid_name.map((currElement, index) => {
               return (
                 <InputGroup>
                   <Form.Group className="p-0 mr-2" md={5} as={Col}>
@@ -154,7 +149,7 @@ class FormInfo extends React.Component {
                   </Form.Group>
                   <Form.Group>
                     <FormControl
-                      placeholder={this.state.quantidade_se[index]}
+                      placeholder={this.state.aid_quantity[index]}
                       disabled
                     />
                   </Form.Group>
@@ -166,16 +161,10 @@ class FormInfo extends React.Component {
                         this.setState({
                           count: this.state.count - 1,
 
-                          bolsa_se: this.state.bolsa_se.filter(
+                          aid_name: this.state.aid_name.filter(
                             (e, i) => i !== index
                           ),
-                          quantidade_se: this.state.quantidade_se.filter(
-                            (e, i) => i !== index
-                          ),
-                          data_inicio_bolsa_se: this.state.data_inicio_bolsa_se.filter(
-                            (e, i) => i !== index
-                          ),
-                          data_fim_bolsa_se: this.state.data_fim_bolsa_se.filter(
+                          aid_quantity: this.state.aid_quantity.filter(
                             (e, i) => i !== index
                           ),
                         })
@@ -188,7 +177,7 @@ class FormInfo extends React.Component {
               );
             })}
           </Form>
-          <Button className="Button" variant="primary">
+          <Button className="Button" variant="primary" onClick={this.Save}>
             CADASTRAR
           </Button>
         </S.Container>

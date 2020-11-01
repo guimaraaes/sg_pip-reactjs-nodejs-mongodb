@@ -1,73 +1,72 @@
 import React from "react";
-import Header from "../../components/Header/index";
-import Statistics from "../../components/Statistics";
-import Search from "../../components/Search";
-import FormInfo from "../../components/FormInfo";
-import * as S from "./styles";
+import { Row } from "react-bootstrap";
+import Pagination from "react-js-pagination";
 import GroupStudents from "../../components/GroupStudents";
-import { Pagination, Row } from "react-bootstrap";
-import alert from "../../assets/alert.png";
-import lupa from "../../assets/lupa.png";
-import edit from "../../assets/edit.png";
-
+import Head from "../../components/Head/index";
+import Header from "../../components/Header/index";
+import api from "../../services/api";
+import * as S from "./styles";
 
 class Process extends React.Component {
   constructor(props) {
     super(props);
-
+    this.params = new URLSearchParams(this.props.location.search);
+    this.id = this.params.get("_id");
+    this.p = Number(this.params.get("page"));
     this.state = {
-      a: false,
+      page: this.p === 0 ? 1 : this.p,
+      process: [],
     };
-
+    this.loadProcess();
+  }
+  handlePageChange(pageNumber) {
+    this.setState({ page: pageNumber });
+    this.props.history.push(this.props.location.search + "&page=" + pageNumber);
+    this.props.history.go();
   }
 
-
+  async loadProcess() {
+    await api.get(`/process/` + this.id).then((respose) => {
+      this.setState({ process: respose.data });
+    });
+  }
   render() {
     return (
       <>
-
         <Header />
-
         <S.Container>
           <S.Head className="mb-5">
-            <h1>SELEÇÃO x</h1>
-            <Row>
-              {this.state.a ? <Search procura="Procurar por seleção" /> : null}
-
-              <button onClick={() => this.setState({ a: !this.state.a })}>
-                <img src={lupa}></img>
-              </button>
-
-              <button class="ml-3">
-                <img src={alert}></img>
-              </button>
-              <button class="ml-3">
-                <a href='/new-process'> editar <img src={edit}></img> </a>
-              </button>
-            </Row>
+            <Head title={this.state.process.title} action="new"></Head>
           </S.Head>
-
-
           <GroupStudents
             color="#5CB85C"
             colorHead="#449D44"
             procura="Procurar por aluno"
-            href="/student-request"
+            href={"/student-request?_id=" + 1}
+            students={1}
           />
+          {this.state.process.selected_studentes_name}
+          {/* {JSON.parse(this.state.process.selected_studentes_name).map((i) => {
+            return (
+              <>
+                <a class="list-group-item btn ">{i}</a>1
+              </>
+            );
+          })} */}
           <S.Head>
-            <Pagination className="ml-5">
-              <Pagination.First />
-              <Pagination.Prev />
-              <Pagination.Item>{1}</Pagination.Item>
-
-              <Pagination.Item active>{2}</Pagination.Item>
-              <Pagination.Item>{3}</Pagination.Item>
-
-              <Pagination.Ellipsis />
-              <Pagination.Next />
-              <Pagination.Last />
-            </Pagination>
-            <Row>Data de início: - Data fim: </Row>
+            <Pagination
+              activePage={this.state.page}
+              itemsCountPerPage={8}
+              totalItemsCount={11}
+              pageRangeDisplayed={2}
+              onChange={this.handlePageChange.bind(this)}
+              itemClass="page-item"
+              linkClass="page-link"
+            />
+            <Row>
+              Data de início: {this.state.process.date_begin} - Data fim:
+              {this.state.process.date_end}
+            </Row>
           </S.Head>
         </S.Container>
       </>

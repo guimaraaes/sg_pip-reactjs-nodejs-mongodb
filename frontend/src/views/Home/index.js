@@ -1,39 +1,44 @@
 import React from "react";
-import Header from "../../components/Header/index";
+import { Row } from "react-bootstrap";
+import Pagination from "react-js-pagination";
 import CardProcess from "../../components/CardProcess";
-import Search from "../../components/Search";
+import Head from "../../components/Head/index";
+import Header from "../../components/Header/index";
+// import Pagination_ from "../../components/Pagination";
+import api from "../../services/api";
 import * as S from "./styles";
-import { Pagination, Row } from "react-bootstrap";
-import lupa from "../../assets/lupa.png";
-import lupauser from "../../assets/lupauser.png";
-import add from "../../assets/add.png";
-
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-
-    this.a = {
-      id: 1,
-      title: [],
-      inprogress: [],
-      date_begin: null,
-      date_end: [],
-      aid_id: null,
-      aid_name: [],
-      aid_quantity: [],
-      selected_studentes_name: [],
-      selected_studentes_aid: null,
-    };
+    this.params = new URLSearchParams(this.props.location.search);
+    this.p = Number(this.params.get("page"));
     this.state = {
-      a: false,
+      page: this.p === 0 ? 1 : this.p,
+      processes: [],
+      processesinfo: [],
     };
-
-    this.list = [this.a, this.a, this.a]
-
+    this.loadProcessesInfo();
+    this.loadProcesses();
+  }
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    this.setState({ page: pageNumber });
+    this.props.history.push("/?page=" + pageNumber);
+    this.props.history.go();
   }
 
+  async loadProcessesInfo() {
+    await api.get(`/process/process_info`).then((respose) => {
+      this.setState({ processesinfo: respose.data });
+    });
+  }
 
+  async loadProcesses() {
+    await api.get(`/process?page=` + this.state.page).then((respose) => {
+      this.setState({ processes: respose.data });
+    });
+  }
 
   render() {
     return (
@@ -41,52 +46,46 @@ class Home extends React.Component {
         <Header />
         <S.Container>
           <S.Head>
-            <h1>SELEÇÕES </h1>
-            <Row>
-
-              {this.state.a ? <Search procura="Procurar por seleção" /> : null}
-
-              <button class='mr-3' onClick={() => this.setState({ a: !this.state.a })}>
-                <img src={lupa}></img>
-              </button>
-              <button class='mr-3' onClick={() => this.setState({ a: !this.state.a })}>
-                <img src={lupauser}></img>
-              </button>
-              <button >
-                <a href='/new-process'> cadastrar <img src={add}></img> </a>
-              </button>
-            </Row>
+            <Head title="SELEÇÕES" action="edit"></Head>
           </S.Head>
-
-          {/* <S.SearchStyle>
-          <h4>EMITIR COMPROVANTE</h4>
-          <Search procura="Procurar por matricula" />
-        </S.SearchStyle> */}
-
           <S.CardProcessStyle className="m-3">
-            {this.list.map((i) => {
-              return <CardProcess href="/process" />;
-            })}
-
-            {this.list.map((i) => {
-              return <CardProcess href="/old-process" />;
+            {this.state.processes.map((i) => {
+              return (
+                <CardProcess
+                  href={
+                    i.inprogress
+                      ? "/process?_id=" + i._id
+                      : "/old-process?" + i._id
+                  }
+                  title={i.title}
+                  total_students={i.selected_studentes_name.length}
+                  total_aid={i.aid_name.length}
+                  color={i.inprogress ? "#5CB85C" : ""}
+                />
+              );
             })}
           </S.CardProcessStyle>
 
-          <Pagination className="ml-5">
-            <Pagination.First />
-            <Pagination.Prev />
-            <Pagination.Item>{1}</Pagination.Item>
+          <S.Head>
+            {/* <Pagination_
+              page={this.state.page}
+              last={this.state.processesinfo.last_page}
+            /> */}
+            <Pagination
+              activePage={this.state.page}
+              itemsCountPerPage={8}
+              totalItemsCount={11}
+              pageRangeDisplayed={2}
+              onChange={this.handlePageChange.bind(this)}
+              itemClass="page-item"
+              linkClass="page-link"
+            />
 
-            <Pagination.Item active>{2}</Pagination.Item>
-            <Pagination.Item>{3}</Pagination.Item>
-
-            <Pagination.Ellipsis />
-            <Pagination.Next />
-            <Pagination.Last />
-          </Pagination>
-
-
+            <Row>
+              Total Processos: {this.state.processesinfo.total} - Total ativos:
+              {this.state.processesinfo.total_active}
+            </Row>
+          </S.Head>
         </S.Container>
       </>
     );
@@ -94,4 +93,3 @@ class Home extends React.Component {
 }
 
 export default Home;
-
