@@ -16,12 +16,16 @@ class Process extends React.Component {
     this.state = {
       page: this.p === 0 ? 1 : this.p,
       process: [],
+      students: [],
+      processesinfo: [],
     };
     this.loadProcess();
+    this.loadStudents();
+    this.loadProcessesInfo();
   }
   handlePageChange(pageNumber) {
     this.setState({ page: pageNumber });
-    this.props.history.push(this.props.location.search + "&page=" + pageNumber);
+    this.props.history.push("/process/?_id=" + this.id + "&page=" + pageNumber);
     this.props.history.go();
   }
 
@@ -30,6 +34,27 @@ class Process extends React.Component {
       this.setState({ process: respose.data });
     });
   }
+
+  async loadStudents() {
+    await api
+      .get(
+        `/student_request/student_on_process/` +
+          this.id +
+          "?page=" +
+          this.state.page
+      )
+      .then((respose) => {
+        this.setState({ students: respose.data });
+      });
+  }
+  async loadProcessesInfo() {
+    await api
+      .get(`student_request/student_on_process/process_info/` + this.id)
+      .then((respose) => {
+        this.setState({ processesinfo: respose.data });
+      });
+  }
+
   render() {
     return (
       <>
@@ -39,26 +64,23 @@ class Process extends React.Component {
             <Head title={this.state.process.title} action="new"></Head>
           </S.Head>
           <GroupStudents
-            color="#5CB85C"
-            colorHead="#449D44"
             procura="Procurar por aluno"
-            href={"/student-request?_id=" + 1}
-            students={1}
+            students={this.state.students}
           />
-          {this.state.process.selected_studentes_name}
-          {/* {JSON.parse(this.state.process.selected_studentes_name).map((i) => {
+          {/* {this.state.students.name} */}
+          {/* {this.state.students.map((i) => {
             return (
               <>
-                <a class="list-group-item btn ">{i}</a>1
+                <a class="list-group-item btn ">{i.name}</a>
               </>
             );
           })} */}
           <S.Head>
             <Pagination
               activePage={this.state.page}
-              itemsCountPerPage={8}
-              totalItemsCount={11}
-              pageRangeDisplayed={2}
+              itemsCountPerPage={5}
+              totalItemsCount={this.state.processesinfo.total}
+              pageRangeDisplayed={3}
               onChange={this.handlePageChange.bind(this)}
               itemClass="page-item"
               linkClass="page-link"
@@ -66,6 +88,9 @@ class Process extends React.Component {
             <Row>
               Data de início: {this.state.process.date_begin} - Data fim:
               {this.state.process.date_end}
+              <br />
+              Total estudantes: {this.state.processesinfo.total} - Total para
+              analisar: {this.state.processesinfo.total_active}
             </Row>
           </S.Head>
         </S.Container>

@@ -1,6 +1,8 @@
 const express = require("express");
+const cors = require("cors");
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -33,6 +35,7 @@ const swaggerOptions = {
         "type": "object",
         "properties": {
             "name": {"type": "string" },
+            "id_process": {"type": "string" },
             "status_coordinator": {"type": "boolean"},
             "status_coordinator_description": {"type": "string"},
             "aid_id": {"type": "number"},

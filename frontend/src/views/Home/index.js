@@ -54,12 +54,12 @@ class Home extends React.Component {
                 <CardProcess
                   href={
                     i.inprogress
-                      ? "/process?_id=" + i._id
+                      ? "/process/?_id=" + i._id
                       : "/old-process?" + i._id
                   }
                   title={i.title}
-                  total_students={i.selected_studentes_name.length}
-                  total_aid={i.aid_name.length}
+                  // total_students={i.selected_studentes_name.length}
+                  total_aid={JSON.stringify(i.aid_name)}
                   color={i.inprogress ? "#5CB85C" : ""}
                 />
               );
@@ -74,7 +74,7 @@ class Home extends React.Component {
             <Pagination
               activePage={this.state.page}
               itemsCountPerPage={8}
-              totalItemsCount={11}
+              totalItemsCount={this.state.processesinfo.total}
               pageRangeDisplayed={2}
               onChange={this.handlePageChange.bind(this)}
               itemClass="page-item"

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-var Process = require('../api/models/ProcessModel.js')
+var Process = require("../api/models/ProcessModel.js");
 
 const ProcessController = require("../api/controllers/ProcessController");
 const ProcessValidation = require("../api/middlewares/ProcessValidation");
@@ -23,6 +23,25 @@ const ProcessValidation = require("../api/middlewares/ProcessValidation");
  *         description: SERVER ERROR
  */
 router.get("/", ProcessController.All);
+
+/**
+ * @swagger
+ * /process/process_info:
+ *   get:
+ *     tags:
+ *       - Process
+ *     description: Pesquisar informações dos processos
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         schema:
+ *          type: object
+ *          $ref: '#/definitions/Process'
+ *       500:
+ *         description: SERVER ERROR
+ */
+router.get("/process_info", ProcessController.AllInfo);
 
 /**
  * @swagger
@@ -74,7 +93,6 @@ router.get("/:id", ProcessController.GetId);
  */
 router.get("/result_search/:title", ProcessController.GetTitle);
 
-
 /**
  * @swagger
  * /process:
@@ -100,7 +118,6 @@ router.get("/result_search/:title", ProcessController.GetTitle);
  *         description: SERVER ERROR
  */
 router.post("/", ProcessValidation, ProcessController.Create);
-
 
 /**
  * @swagger

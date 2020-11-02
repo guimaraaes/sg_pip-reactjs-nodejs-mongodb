@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-var StudentRequestModel = require('../api/models/StudentRequestModel')
+var StudentRequestModel = require("../api/models/StudentRequestModel");
 
 const StudentRequestController = require("../api/controllers/StudentRequestController");
+const StudentRequestValidation = require("../api/middlewares/StudentRequestValidation");
 
 /**
  * @swagger
@@ -20,7 +21,6 @@ const StudentRequestController = require("../api/controllers/StudentRequestContr
  *         description: SERVER ERROR
  */
 router.get("/", StudentRequestController.All);
-
 
 /**
  * @swagger
@@ -55,7 +55,7 @@ router.get("/:id", StudentRequestController.GetId);
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: nome
+ *       - name: name
  *         description: nome do estudante
  *         in: path
  *         required: true
@@ -66,7 +66,55 @@ router.get("/:id", StudentRequestController.GetId);
  *       500:
  *         description: SERVER ERROR
  */
-router.get("/:id", StudentRequestController.GetName);
+router.get("/result_search/:name", StudentRequestController.GetName);
+
+/**
+ * @swagger
+ * /student_request/student_on_process/{id_process}:
+ *   get:
+ *     tags:
+ *       - Student_request
+ *     description: Requisição do estudante pelo nome
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id_process
+ *         description: id do processo do estudante
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Solicitação pesquisada
+ *       500:
+ *         description: SERVER ERROR
+ */
+router.get(
+  "/student_on_process/:id_process",
+  StudentRequestController.StudentsOnProcess
+);
+
+/**
+ * @swagger
+ * /student_request/student_on_process/process_info/{id_process}:
+ *   get:
+ *     tags:
+ *       - Student_request
+ *     description: Pesquisar informações dos alunos no processo
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         schema:
+ *          type: object
+ *          $ref: '#/definitions/Process'
+ *       500:
+ *         description: SERVER ERROR
+ */
+router.get(
+  "/student_on_process/process_info/:id_process",
+  StudentRequestController.StudentsOnProcessInfo
+);
 
 /**
  * @swagger
@@ -88,7 +136,7 @@ router.get("/:id", StudentRequestController.GetName);
  *       200:
  *         description: Solicitação realizada
  */
-router.post("/", StudentRequestController.Create);
+router.post("/", StudentRequestValidation, StudentRequestController.Create);
 
 /**
  * @swagger
@@ -115,7 +163,6 @@ router.post("/", StudentRequestController.Create);
  *       200:
  *         description: Solicitação realizada
  */
-router.post("/", StudentRequestController.Edit);
-
+router.put("/:id", StudentRequestValidation, StudentRequestController.Edit);
 
 module.exports = router;

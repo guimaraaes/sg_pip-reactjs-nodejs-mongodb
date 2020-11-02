@@ -15,7 +15,6 @@ class FormInfo extends React.Component {
       aid: null,
       quantity: null,
       count: 0,
-      aid_id: [],
       aid_name: [],
       aid_quantity: [],
       title: null,
