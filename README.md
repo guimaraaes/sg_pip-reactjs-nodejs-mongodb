@@ -1,4 +1,4 @@
-# WEB
+# spPIP: Sistema de Gestão do Programa Institucional de Permanência Acadêmica
 
 > aplicação web para o gerenciamento de bolsas do programa institucional de permanência da UFERSA
 
