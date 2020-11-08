@@ -31,7 +31,9 @@ class Head extends React.Component {
   render() {
     return (
       <>
-        <h1>pgPIP: {this.state.title} </h1>
+        <h1>
+          pgPIP: {this.state.title}: {this.props.title}
+        </h1>
 
         <Row>
           {this.props.action == "new" ? (

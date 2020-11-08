@@ -17,7 +17,8 @@ class Process extends React.Component {
       page: this.p === 0 ? 1 : this.p,
       process: [],
       students: [],
-      studentinfo: [],
+      info: [],
+      name_student_search: "",
     };
     this.loadProcess();
     this.loadStudents();
@@ -51,9 +52,11 @@ class Process extends React.Component {
     await api
       .get(`student_request/student_on_process/student_info/` + this.id)
       .then((respose) => {
-        this.setState({ studentinfo: respose.data });
+        this.setState({ info: respose.data });
       });
   }
+
+  handleChange = (e) => this.setState(e);
 
   render() {
     return (
@@ -63,8 +66,10 @@ class Process extends React.Component {
           <S.Head className="mb-5">
             <Head
               title={this.state.process.title}
+              name_student_search={this.state.name_student_search}
               action="edit"
               id={this.id}
+              onChange={this.handleChange}
             ></Head>
           </S.Head>
           <S.GroupStudentsContainer>
@@ -72,20 +77,12 @@ class Process extends React.Component {
               procura="Procurar por aluno"
               students={this.state.students}
             />
-            {/* {this.state.students.name} */}
-            {/* {this.state.students.map((i) => {
-            return (
-              <>
-                <a class="list-group-item btn ">{i.name}</a>
-              </>
-            );
-          })} */}
           </S.GroupStudentsContainer>
           <S.Head>
             <Pagination
               activePage={this.state.page}
               itemsCountPerPage={5}
-              totalItemsCount={this.state.studentinfo.total}
+              totalItemsCount={this.state.info.total}
               pageRangeDisplayed={3}
               onChange={this.handlePageChange.bind(this)}
               itemClass="page-item"
@@ -95,8 +92,8 @@ class Process extends React.Component {
               Data de início: {this.state.process.date_begin} - Data fim:
               {this.state.process.date_end}
               <br />
-              Total estudantes: {this.state.studentinfo.total} - Total para
-              analisar: {this.state.studentinfo.total_active}
+              Total: {this.state.info.total} - Total ativo:
+              {this.state.info.total_active}
             </Row>
           </S.Head>
         </S.Container>
