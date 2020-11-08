@@ -4,11 +4,10 @@ const StudentRequestModel = require("../models/StudentRequestModel");
 class StudentRequestController {
   async All(req, res) {
     const page = parseInt(req.query.page);
-
     await StudentRequestModel.find()
       .select({ _id: 1, name: 1, status_coordinator: 1 })
-      .skip(page)
-      .limit(10)
+      .skip((page - 1) * 5)
+      .limit(5)
       .then((response) => {
         return res.status(200).json(response);
       })
@@ -28,8 +27,14 @@ class StudentRequestController {
   }
 
   async GetName(req, res) {
-    await StudentRequestModel.find({ name: { $eq: req.params.name } })
+    const page = parseInt(req.query.page);
+    const name_searc = String(req.params.name_search);
+    // console.log(page + "s");
+    await StudentRequestModel.find({ name: { $regex: name_searc } })
       .select({ _id: 1, name: 1, status_coordinator: 1 })
+      .sort("status_coordinator")
+      .skip((page - 1) * 5)
+      .limit(5)
       .then((response) => {
         if (response) return res.status(200).json(response);
         else return res.status(404).json("processo não encontrado");
@@ -58,8 +63,21 @@ class StudentRequestController {
 
   async StudentsOnProcessInfo(req, res) {
     var total_active = 0;
+    var fi = {};
+
+    var req_title = "1";
+    req.params.id_process
+      ? (req_title = String(req.params.id_process))
+      : (req_title = "");
+    // console.log(req_title);
+    // String(req.params.id_process)
+    //   ? (fi = {
+    //       id_process: { $regex: String(req.params.id_process) },
+    //     })
+    //   : (fi = {});
+
     await StudentRequestModel.find({
-      id_process: { $eq: req.params.id_process },
+      name: { $regex: String(req.params.id_process) },
     })
       .then((response) => {
         response.map((i) => {

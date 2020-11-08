@@ -20,7 +20,11 @@ class ProcessController {
 
   async AllInfo(req, res) {
     var total_active = 0;
-    await ProcessModel.find()
+    var req_title = "";
+    req.params.title_process_search
+      ? (req_title = String(req.params.title_process_search))
+      : (req_title = "");
+    await ProcessModel.find({ title: { $regex: req_title } })
       // .select({ _id: 1, inprogress: 1, title: 1 })
 
       .then((response) => {
@@ -40,6 +44,7 @@ class ProcessController {
 
   async GetId(req, res) {
     await ProcessModel.findById(req.params.id)
+      .sort({ inprogress: -1 })
       .then((response) => {
         return res.status(200).json(response);
       })
@@ -49,7 +54,11 @@ class ProcessController {
   }
 
   async GetTitle(req, res) {
-    await ProcessModel.find({ title: { $eq: req.params.title } })
+    const page = parseInt(req.query.page);
+    await ProcessModel.find({ title: { $regex: req.params.title } })
+      .sort({ inprogress: -1 })
+      .skip((page - 1) * 8)
+      .limit(8)
       .then((response) => {
         if (response) return res.status(200).json(response);
         else return res.status(404).json("processo não encontrado");

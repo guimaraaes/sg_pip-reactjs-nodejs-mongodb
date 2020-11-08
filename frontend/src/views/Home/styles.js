@@ -8,6 +8,7 @@ export const SearchStyle = styled.div`
 
 export const Head = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
 
   justify-content: space-between;
@@ -33,10 +34,9 @@ export const Container = styled.div`
   padding: 40px;
 `;
 
-export const CardProcessStyle = styled.div`
+export const ProcessStudents = styled.div`
   display: flex;
-
-  align-items: center;
   flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  min-height: 380px;
 `;

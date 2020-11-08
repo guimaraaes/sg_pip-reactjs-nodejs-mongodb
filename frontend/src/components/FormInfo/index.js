@@ -28,6 +28,7 @@ class FormInfo extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.Save = this.Save.bind(this);
+    this.loadProcess();
   }
 
   handleChange(event) {
@@ -36,6 +37,7 @@ class FormInfo extends React.Component {
       [event.target.name]: value,
     });
   }
+
   async Save() {
     await api.post("/process", {
       aid_id: this.state.aid_id,
@@ -47,6 +49,25 @@ class FormInfo extends React.Component {
       date_end: this.state.date_end,
     });
   }
+
+  async loadProcess() {
+    await api.get(`/process/` + this.props.id).then((response) => {
+      this.setState(response.data);
+    });
+  }
+
+  async Edit() {
+    await api.put("/process/" + this.props.id, {
+      aid_id: this.state.aid_id,
+      aid_name: this.state.aid_name,
+      aid_quantity: this.state.aid_quantity,
+      title: this.state.title,
+      inprogress: true,
+      date_begin: this.state.date_begin,
+      date_end: this.state.date_end,
+    });
+  }
+
   render() {
     return (
       <>
@@ -176,9 +197,15 @@ class FormInfo extends React.Component {
               );
             })}
           </Form>
-          <Button className="Button" variant="primary" onClick={this.Save}>
-            CADASTRAR
-          </Button>
+          {this.props.id ? (
+            <Button className="Button" variant="primary" onClick={this.Edit}>
+              EDITAR
+            </Button>
+          ) : (
+            <Button className="Button" variant="primary" onClick={this.Save}>
+              CADASTRAR
+            </Button>
+          )}
         </S.Container>
       </>
     );

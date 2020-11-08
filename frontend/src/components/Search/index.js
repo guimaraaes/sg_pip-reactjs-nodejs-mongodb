@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, FormControl, Button } from "react-bootstrap";
+import { Form, FormControl } from "react-bootstrap";
 
 function Search(props) {
   return (
@@ -8,6 +8,7 @@ function Search(props) {
         <FormControl
           class="mb-4"
           type="text"
+          name={props.name}
           placeholder={props.procura}
           className="mr-sm-2"
         />

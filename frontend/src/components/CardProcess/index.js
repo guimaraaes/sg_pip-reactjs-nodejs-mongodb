@@ -19,8 +19,8 @@ function CardProcess(props) {
           </S.CardHeader>
           <Card.Body>
             <Card.Text>
-              alunos inscritos: {props.total_students}. <br />
-              bolsas ofertadas: {props.total_aid}.
+              data término: {props.date_end} <br />
+              bolsas ofertadas: {props.total_aid}
             </Card.Text>
           </Card.Body>
         </Card>

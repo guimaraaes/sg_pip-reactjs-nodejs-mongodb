@@ -10,10 +10,11 @@ export const Container = styled.div`
 
 export const GroupStudentsContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
-
   flex-wrap: wrap;
+  flex-direction: column;
+  min-height: 380px;
 `;
+
 export const Head = styled.div`
   display: flex;
   align-items: baseline;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Row } from "react-bootstrap";
 import Pagination from "react-js-pagination";
-import GroupStudents from "../../components/GroupStudents";
+import GroupStudents from "../../components/GroupStudents/index";
 import Head from "../../components/Head/index";
 import Header from "../../components/Header/index";
 import api from "../../services/api";
@@ -17,11 +17,11 @@ class Process extends React.Component {
       page: this.p === 0 ? 1 : this.p,
       process: [],
       students: [],
-      processesinfo: [],
+      studentinfo: [],
     };
     this.loadProcess();
     this.loadStudents();
-    this.loadProcessesInfo();
+    this.loadStudentsInfo();
   }
   handlePageChange(pageNumber) {
     this.setState({ page: pageNumber });
@@ -47,11 +47,11 @@ class Process extends React.Component {
         this.setState({ students: respose.data });
       });
   }
-  async loadProcessesInfo() {
+  async loadStudentsInfo() {
     await api
-      .get(`student_request/student_on_process/process_info/` + this.id)
+      .get(`student_request/student_on_process/student_info/` + this.id)
       .then((respose) => {
-        this.setState({ processesinfo: respose.data });
+        this.setState({ studentinfo: respose.data });
       });
   }
 
@@ -61,25 +61,31 @@ class Process extends React.Component {
         <Header />
         <S.Container>
           <S.Head className="mb-5">
-            <Head title={this.state.process.title} action="new"></Head>
+            <Head
+              title={this.state.process.title}
+              action="edit"
+              id={this.id}
+            ></Head>
           </S.Head>
-          <GroupStudents
-            procura="Procurar por aluno"
-            students={this.state.students}
-          />
-          {/* {this.state.students.name} */}
-          {/* {this.state.students.map((i) => {
+          <S.GroupStudentsContainer>
+            <GroupStudents
+              procura="Procurar por aluno"
+              students={this.state.students}
+            />
+            {/* {this.state.students.name} */}
+            {/* {this.state.students.map((i) => {
             return (
               <>
                 <a class="list-group-item btn ">{i.name}</a>
               </>
             );
           })} */}
+          </S.GroupStudentsContainer>
           <S.Head>
             <Pagination
               activePage={this.state.page}
               itemsCountPerPage={5}
-              totalItemsCount={this.state.processesinfo.total}
+              totalItemsCount={this.state.studentinfo.total}
               pageRangeDisplayed={3}
               onChange={this.handlePageChange.bind(this)}
               itemClass="page-item"
@@ -89,8 +95,8 @@ class Process extends React.Component {
               Data de início: {this.state.process.date_begin} - Data fim:
               {this.state.process.date_end}
               <br />
-              Total estudantes: {this.state.processesinfo.total} - Total para
-              analisar: {this.state.processesinfo.total_active}
+              Total estudantes: {this.state.studentinfo.total} - Total para
+              analisar: {this.state.studentinfo.total_active}
             </Row>
           </S.Head>
         </S.Container>

@@ -66,7 +66,7 @@ router.get("/:id", StudentRequestController.GetId);
  *       500:
  *         description: SERVER ERROR
  */
-router.get("/result_search/:name", StudentRequestController.GetName);
+router.get("/result_search/:name_search", StudentRequestController.GetName);
 
 /**
  * @swagger
@@ -112,7 +112,7 @@ router.get(
  *         description: SERVER ERROR
  */
 router.get(
-  "/student_on_process/process_info/:id_process",
+  "/student_on_process/student_info/:id_process?",
   StudentRequestController.StudentsOnProcessInfo
 );
 

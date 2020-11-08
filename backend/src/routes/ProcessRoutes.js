@@ -41,7 +41,7 @@ router.get("/", ProcessController.All);
  *       500:
  *         description: SERVER ERROR
  */
-router.get("/process_info", ProcessController.AllInfo);
+router.get("/process_info/:title_process_search?", ProcessController.AllInfo);
 
 /**
  * @swagger
