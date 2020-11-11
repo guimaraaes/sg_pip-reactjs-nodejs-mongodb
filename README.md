@@ -32,10 +32,15 @@ Coordenador
 - [x] Consultar um processo específico
 - [ ] Consultar submissões dos discentes
 - [ ] Editar processos
+- [ ] Excluir processos
 
 Discente
 - [ ] Consultar processos
 - [ ] Realizar submissão em processos
+- [ ] Cadastrar documentos .pdf
+- [ ] Envio de e-mail para o discente
 
+Geral
+- [ ] Mensagens de alerta: erro ou operação concluída
 
 
