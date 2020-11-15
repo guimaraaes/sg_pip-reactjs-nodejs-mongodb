@@ -15,9 +15,7 @@ class Processes extends React.Component {
             return (
               <CardProcess
                 href={
-                  i.inprogress
-                    ? "/process/?_id=" + i._id
-                    : "/old-process/?" + i._id
+                  i.inprogress ? "/process/" + i._id : "/old-process/?" + i._id
                 }
                 title={i.title}
                 date_end={i.date_end}

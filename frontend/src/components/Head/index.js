@@ -12,12 +12,12 @@ class Head extends React.Component {
     this.state = {
       search_process: false,
       search_student: false,
-      title: "SELEÇÃO",
       title_process_search: this.props.title_process_search,
       name_student_search: this.props.name_student_search,
       process: [],
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
@@ -27,13 +27,28 @@ class Head extends React.Component {
       ? (this.state.title = "SELEÇÃO")
       : (this.state.title = "DISCENTE");
   };
-
+  onKeyUp(event) {
+    // window.location.href = "as";
+    this.props.hist.push(
+      this.props.loc + "&name_student_search=" + this.state.name_student_search
+    );
+    this.props.hist.go();
+    var key = event.which || event.keyCode;
+    if (event.keyCode == 13) {
+      // alert("Enter clicked!!!");
+      // window.location.href = "as";
+      this.props.hist.push(
+        this.props.loc +
+          "&name_student_search=" +
+          this.state.name_student_search
+      );
+      this.props.hist.go();
+    }
+  }
   render() {
     return (
       <>
-        <h1>
-          pgPIP: {this.state.title}: {this.props.title}
-        </h1>
+        <h1>sg PIP</h1>
 
         <Row>
           {this.props.action == "new" ? (
@@ -66,34 +81,40 @@ class Head extends React.Component {
                 <Image src={lupa}></Image>
               </Button>
             </>
-          ) : null}
-          {this.state.search_student ? (
+          ) : (
             <>
-              <Form inline>
-                <FormControl
-                  class="mb-4"
-                  type="text"
-                  name="name_student_search"
-                  value={this.state.name_student_search}
-                  onChange={this.handleChange}
-                  placeholder="Procurar por estudante"
-                  className="mr-sm-2"
-                />
-              </Form>
+              {this.state.search_student ? (
+                <>
+                  <Form inline>
+                    <FormControl
+                      onPressEnter={this.onKeyUp}
+                      class="mb-4"
+                      type="text"
+                      name="name_student_search"
+                      value={this.state.name_student_search}
+                      onChange={this.handleChange}
+                      placeholder="Procurar por estudante"
+                      className="mr-sm-2"
+                      href="s"
+                      // onClick={() => (window.location.href = "as")}
+                    />
+                  </Form>
+                </>
+              ) : null}
+              <Button
+                className="mr-3"
+                onClick={() =>
+                  this.setState({
+                    search_student: !this.state.search_student,
+                    search_process: false,
+                    title_process_search: "",
+                  })
+                }
+              >
+                <Image src={lupauser}></Image>
+              </Button>
             </>
-          ) : null}
-          <Button
-            className="mr-3"
-            onClick={() =>
-              this.setState({
-                search_student: !this.state.search_student,
-                search_process: false,
-                title_process_search: "",
-              })
-            }
-          >
-            <Image src={lupauser}></Image>
-          </Button>
+          )}
 
           {this.props.action == "new" ? (
             <Button>

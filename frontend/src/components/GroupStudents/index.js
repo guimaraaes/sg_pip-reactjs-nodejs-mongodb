@@ -19,7 +19,12 @@ class GroupStudents extends React.Component {
                     <S.A color={i.status_coordinator ? "#5CB85C" : "#D9534F"}>
                       <a
                         class="list-group-item btn "
-                        href={"/student-request/?_id=" + i._id}
+                        href={
+                          "/student-request/" +
+                          this.props.id_process +
+                          "/" +
+                          i._id
+                        }
                         color={this.color}
                       >
                         {i.name}

@@ -29,8 +29,12 @@ class StudentRequestController {
   async GetName(req, res) {
     const page = parseInt(req.query.page);
     const name_searc = String(req.params.name_search);
+    const id_process = String(req.params.id_process);
     // console.log(page + "s");
-    await StudentRequestModel.find({ name: { $regex: name_searc } })
+    await StudentRequestModel.find({
+      name: { $regex: name_searc },
+      id_process: { $eq: req.params.id_process },
+    })
       .select({ _id: 1, name: 1, status_coordinator: 1 })
       .sort("status_coordinator")
       .skip((page - 1) * 5)
@@ -65,10 +69,10 @@ class StudentRequestController {
     var total_active = 0;
     var fi = {};
 
-    var req_title = "1";
-    req.params.id_process
-      ? (req_title = String(req.params.id_process))
-      : (req_title = "");
+    var req_name = "";
+    req.params.student_name
+      ? (req_name = String(req.params.student_name))
+      : null;
     // console.log(req_title);
     // String(req.params.id_process)
     //   ? (fi = {
@@ -77,11 +81,13 @@ class StudentRequestController {
     //   : (fi = {});
 
     await StudentRequestModel.find({
-      name: { $regex: String(req.params.id_process) },
+      name: { $regex: req_name },
+      id_process: req.params.id_process,
     })
       .then((response) => {
         response.map((i) => {
           i.status_coordinator ? total_active : total_active++;
+          // total_active++;
         });
         return res.status(200).json({
           total: response.length,
