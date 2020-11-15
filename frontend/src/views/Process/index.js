@@ -95,7 +95,7 @@ class Process extends React.Component {
       });
   }
 
-  handleChange = (e) => this.setState(e);
+  // handleChange = (e) => this.setState(e);
 
   render() {
     return (

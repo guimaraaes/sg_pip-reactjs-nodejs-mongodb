@@ -1,77 +1,88 @@
 import moment from "moment";
 import React from "react";
 import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
-import CurrencyInput from "react-currency-input";
 import add from "../../assets/add.png";
 import remove from "../../assets/remove.png";
-import api from "../../services/api";
 import * as S from "./styles";
 
 class FormInfo extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      aid: null,
-      quantity: null,
       count: 0,
-      aid_name: [],
-      aid_quantity: [],
-      title: null,
-      inprogress: true,
-      date_begin: null,
-      date_end: null,
+      aid: "",
+      quantity: "",
+
+      aid_name: [this.props.aid_name],
+      aid_quantity: [this.props.aid_quantity],
+      title: this.props.title,
+      inprogress: this.props.inprogress,
+      date_begin: this.props.date_begin,
+      date_end: this.props.date_end,
     };
+    this.title = this.props.title;
+
+    // (this.state.title: this.props.process.title),
+    // this.process = {
+    //   process: {
+    //     aid_name: this.state.aid_name,
+    //     aid_quantity: this.state.aid_quantity,
+    //     title: this.state.title,
+    //     inprogress: this.state.inprogress,
+    //     date_begin: this.state.date_begin,
+    //     date_end: this.state.date_end,
+    //   },
+    // };
+    this.id = this.props.id;
 
     this.moradiaFamiliarCampus = null;
     this.validated = 1;
 
     this.handleChange = this.handleChange.bind(this);
-    this.Save = this.Save.bind(this);
-    this.loadProcess();
+    // this.handleChangeProcess = this.handleChangeProcess.bind(this);
+    this.Save = this.props.Save.bind(this);
+    this.Edit = this.props.Edit.bind(this);
+    // this.updateProcess();
   }
 
-  handleChange(event) {
-    const value = event.target.value;
-    this.setState({
-      [event.target.name]: value,
-    });
-  }
+  // updateProcess() {
+  //   this.process = {
+  //     process: {
+  //       aid_name: this.state.aid_name,
+  //       aid_quantity: this.state.aid_quantity,
+  //       title: this.state.title,
+  //       inprogress: this.state.inprogress,
+  //       date_begin: this.state.date_begin,
+  //       date_end: this.state.date_end,
+  //     },
+  //   };
+  // }
 
-  async Save() {
-    await api.post("/process", {
-      aid_id: this.state.aid_id,
-      aid_name: this.state.aid_name,
-      aid_quantity: this.state.aid_quantity,
-      title: this.state.title,
-      inprogress: true,
-      date_begin: this.state.date_begin,
-      date_end: this.state.date_end,
-    });
-  }
+  handleChange = (e) => this.setState(e);
 
-  async loadProcess() {
-    await api.get(`/process/` + this.props.id).then((response) => {
-      this.setState(response.data);
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      // this.updateProcess();
+      this.props.onChange(this.state);
     });
-  }
+  };
 
-  async Edit() {
-    await api.put("/process/" + this.props.id, {
-      aid_id: this.state.aid_id,
-      aid_name: this.state.aid_name,
-      aid_quantity: this.state.aid_quantity,
-      title: this.state.title,
-      inprogress: true,
-      date_begin: this.state.date_begin,
-      date_end: this.state.date_end,
-    });
-  }
+  // handleChangeProcess = (e) => {
+  //   this.setState({ process: { [e.target.name]: e.target.value } }, () => {
+  //     this.props.onChange(this.state);
+  //   });
+  // };
 
   render() {
     return (
       <>
         <S.Container>
+          {/* {this.id} */}
+          {/* {this.title} */}
+          {/* {this.props.title}props */}
+          {/* {this.state.title} */}
+          {/* {(this.state.title = this.props.process.title)} */}
+          {/* {(this.state.title = this.props.process.title)} */}
           <Form
             noValidate
             validated={this.validated}
@@ -115,6 +126,9 @@ class FormInfo extends React.Component {
               />
             </Form.Group>
             <Form.Label>BOLSAS OFERTADAS</Form.Label>
+            {/* {this.state.title}
+            {this.state.aid}
+            {this.state.quantity} */}
             <InputGroup>
               <Form.Group className="p-0 mr-2" md={5} as={Col}>
                 <FormControl
@@ -127,13 +141,14 @@ class FormInfo extends React.Component {
                 />
               </Form.Group>
               <Form.Group>
-                <CurrencyInput
+                <FormControl
                   className="form-control"
                   name="quantity"
                   placeholder="quantidade"
-                  precision="0"
+                  min="0"
+                  type="number"
                   value={this.state.quantity}
-                  onChangeEvent={this.handleChange}
+                  onChange={this.handleChange}
                   required
                 />
               </Form.Group>
@@ -142,62 +157,73 @@ class FormInfo extends React.Component {
                 <Button
                   className="buttonAdd"
                   disabled={
-                    !!this.state.aid && this.state.quantity ? false : true
+                    this.state.aid && this.state.quantity ? false : true
                   }
                   onClick={() =>
-                    this.setState({
-                      count: this.state.count + 1,
-                      aid_name: this.state.aid_name.concat(this.state.aid),
-                      aid_quantity: this.state.aid_quantity.concat(
-                        this.state.quantity
-                      ),
+                    this.setState(
+                      {
+                        count: this.state.count + 1,
+                        aid_name: this.state.aid_name.concat(this.state.aid),
+                        aid_quantity: this.state.aid_quantity.concat(
+                          this.state.quantity
+                        ),
 
-                      aid: [],
-                      quantity: null,
-                    })
+                        aid: "",
+                        quantity: "",
+                      }
+                      // () => {
+                      //   this.updateProcess();
+                      //   this.props.onChange(this.process);
+                      // }
+                    )
                   }
                 >
                   <img src={add}></img>
                 </Button>
               </Form.Group>
             </InputGroup>
-            {this.state.aid_name.map((currElement, index) => {
-              return (
-                <InputGroup>
-                  <Form.Group className="p-0 mr-2" md={5} as={Col}>
-                    <FormControl placeholder={currElement} disabled />
-                  </Form.Group>
-                  <Form.Group>
-                    <FormControl
-                      placeholder={this.state.aid_quantity[index]}
-                      disabled
-                    />
-                  </Form.Group>
+            {/* {Array.from(this.state.process.aid_name)} */}
+            {String(this.state.aid_name)
+              .split(",")
+              .map((currElement, index) => {
+                return (
+                  <InputGroup>
+                    <Form.Group className="p-0 mr-2" md={5} as={Col}>
+                      <FormControl placeholder={currElement} disabled />
+                    </Form.Group>
+                    <Form.Group>
+                      <FormControl
+                        placeholder={
+                          String(this.state.aid_quantity).split(",")[index]
+                        }
+                        disabled
+                      />
+                    </Form.Group>
 
-                  <Form.Group>
-                    <Button
-                      className="buttonAdd"
-                      onClick={() =>
-                        this.setState({
-                          count: this.state.count - 1,
+                    <Form.Group>
+                      <Button
+                        className="buttonAdd"
+                        onClick={() =>
+                          this.setState({
+                            count: this.state.count - 1,
 
-                          aid_name: this.state.aid_name.filter(
-                            (e, i) => i !== index
-                          ),
-                          aid_quantity: this.state.aid_quantity.filter(
-                            (e, i) => i !== index
-                          ),
-                        })
-                      }
-                    >
-                      <img src={remove}></img>
-                    </Button>
-                  </Form.Group>
-                </InputGroup>
-              );
-            })}
+                            aid_name: this.state.aid_name.filter(
+                              (e, i) => i !== index
+                            ),
+                            aid_quantity: this.state.aid_quantity.filter(
+                              (e, i) => i !== index
+                            ),
+                          })
+                        }
+                      >
+                        <img src={remove}></img>
+                      </Button>
+                    </Form.Group>
+                  </InputGroup>
+                );
+              })}
           </Form>
-          {this.props.id ? (
+          {this.id ? (
             <Button className="Button" variant="primary" onClick={this.Edit}>
               EDITAR
             </Button>

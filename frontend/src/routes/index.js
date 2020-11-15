@@ -11,7 +11,7 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/new-process" exact component={NewProcess} />
+        <Route path="/new-process/:id?" exact component={NewProcess} />
         <Route path="/process/:_id" exact component={Process} />
         <Route path="/old-process" exact component={OldProcess} />
         <Route

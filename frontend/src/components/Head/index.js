@@ -23,9 +23,6 @@ class Head extends React.Component {
     this.setState({ [e.target.name]: e.target.value }, () => {
       this.props.onChange(this.state);
     });
-    this.state.title_process_search
-      ? (this.state.title = "SELEÇÃO")
-      : (this.state.title = "DISCENTE");
   };
   onKeyUp(event) {
     // window.location.href = "as";
@@ -124,7 +121,7 @@ class Head extends React.Component {
             </Button>
           ) : (
             <Button>
-              <a href={"/new-process/?_id=" + this.props.id}>
+              <a href={"/new-process/" + this.props.id}>
                 editar <Image src={edit}></Image>
               </a>
             </Button>

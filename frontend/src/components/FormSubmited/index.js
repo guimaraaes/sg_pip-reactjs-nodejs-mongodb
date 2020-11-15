@@ -1,20 +1,11 @@
-import React, { useState } from "react";
-import {
-  Row,
-  Col,
-  Button,
-  Form,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
-import remove from "../../assets/remove.png";
-import * as S from "./styles";
-import calendar from "../../assets/calendar.png";
-import add from "../../assets/add.png";
-import upload from "../../assets/upload.png";
-import InputMask from "react-input-mask";
 import moment from "moment";
+import React from "react";
+import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
 import CurrencyInput from "react-currency-input";
+import add from "../../assets/add.png";
+import remove from "../../assets/remove.png";
+import api from "../../services/api";
+import * as S from "./styles";
 
 require("moment/locale/pt.js");
 
@@ -23,6 +14,10 @@ class FormSubmited extends React.Component {
     super(props);
 
     this.state = {
+      student_request: [],
+      process: [],
+      process2: [1, 2],
+
       count: 0,
       name_cp: [],
       name: null,
@@ -38,6 +33,8 @@ class FormSubmited extends React.Component {
 
       monthly_income_cp: [],
       monthly_income: null,
+
+      motivation: "",
     };
 
     this.annex_degree = null;
@@ -51,20 +48,29 @@ class FormSubmited extends React.Component {
     this.validated = 1;
     this.handleChange = this.handleChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
+    this.loadProcess();
   }
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      this.props.onChange(this.state);
+    });
+    // if (e.target.value) {
+    //   const value = e.target.value;
+    //   this.setState({
+    //     [e.target.name]: value,
+    //   });
+    // } else {
+    //   const value = e.target.value;
+    //   this.setState({
+    //     [e.target.name]: null,
+    //   });
+    // }
+  };
 
-  handleChange(event) {
-    if (event.target.value) {
-      const value = event.target.value;
-      this.setState({
-        [event.target.name]: value,
-      });
-    } else {
-      const value = event.target.value;
-      this.setState({
-        [event.target.name]: null,
-      });
-    }
+  async loadProcess() {
+    await api.get(`/process/` + this.props.id).then((respose) => {
+      this.setState({ process: respose.data });
+    });
   }
 
   // handleSubmit = (event) => {
@@ -87,7 +93,10 @@ class FormSubmited extends React.Component {
             onSubmit={this.handleSubmit}
           >
             <Form.Group>
-              <FormControl placeholder="MATRICULA E NOME" disabled />
+              <FormControl
+                placeholder={this.state.student_request.name}
+                disabled
+              />
             </Form.Group>
             <Form.Group controlId="exampleForm.SelectCustomSizeLg">
               <Form.Label>BOLSA</Form.Label>
@@ -95,11 +104,13 @@ class FormSubmited extends React.Component {
                 <option value="" disabled selected>
                   Escolher bolsa
                 </option>
-                <option>Bolsa x</option>
-                <option>Bolsa x</option>
-                <option>Bolsa x</option>
-                <option>Bolsa x</option>
-                <option>Bolsa x</option>
+                {this.state.process2.map((i) => {
+                  return (
+                    <>
+                      <option>Bolsa i</option>
+                    </>
+                  );
+                })}
               </Form.Control>
             </Form.Group>
             <Form.Label>COMPOSIÇÃO FAMILIAR</Form.Label>
@@ -283,7 +294,14 @@ class FormSubmited extends React.Component {
             })}
             <Form.Group>
               <Form.Label>MOTIVAÇÃO PARA SER BOLSISTA</Form.Label>
-              <Form.Control as="textarea" name="motivation" rows="3" required />
+              <Form.Control
+                as="textarea"
+                name="motivation"
+                value={this.state.motivation}
+                onChange={this.handleChange}
+                rows="3"
+                required
+              />
             </Form.Group>
             <Form.Label>QUESTIONÁRIO</Form.Label>
             <Form.Group>

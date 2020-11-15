@@ -1,6 +1,4 @@
 import React from "react";
-
-import Search from "../Search";
 import * as S from "./styles";
 
 function ListSelectStudents(props) {

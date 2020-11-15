@@ -2,8 +2,8 @@
 /data
 # dependencies
 /frontend/node_modules
+/frontend/src/_Pagination
 /backend/node_modules
-/node_modules
 /.pnp
 .pnp.js
 
