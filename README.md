@@ -34,7 +34,7 @@ Coordenador
 - [x] Buscar por processos e discentes
 - [x] Consultar um processo específico
 - [x] Consultar submissões dos discentes
-- [ ] Editar processos
+- [x] Editar processos
 - [ ] Finalizar processos
 <!-- - [ ] Excluir processos -->
 

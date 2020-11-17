@@ -7,18 +7,19 @@ import * as S from "./styles";
 class NewProcess extends React.Component {
   constructor(props) {
     super(props);
-
+    this.path = this.props.location.pathname.split("/")[1];
     this.id = this.props.location.pathname.split("/")[2];
     this.state = {
       title: "",
       inprogress: true,
+      titleDefault: "",
     };
+
     this.process = 0;
     this.Save = this.Save.bind(this);
     this.Edit = this.Edit.bind(this);
 
     this.loadProcess();
-    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   }
 
   handleChange = (e) => this.setState(e);
@@ -51,6 +52,7 @@ class NewProcess extends React.Component {
         date_begin: response.data.date_begin,
         date_end: response.data.date_end,
         process: response.data,
+        titleDefault: response.data.title,
       });
     });
   }
@@ -70,8 +72,26 @@ class NewProcess extends React.Component {
     return (
       <>
         <Header />
+
         <S.Container>
-          {this.state.title ? (
+          {this.path == "edit-process" ? (
+            this.state.titleDefault ? (
+              <>
+                <FormInfo
+                  id={this.id}
+                  aid_name={this.state.aid_name}
+                  aid_quantity={this.state.aid_quantity}
+                  title={this.state.title}
+                  inprogress={this.state.inprogress}
+                  date_begin={this.state.date_begin}
+                  date_end={this.state.date_end}
+                  onChange={this.handleChange}
+                  Save={this.Save}
+                  Edit={this.Edit}
+                />
+              </>
+            ) : null
+          ) : (
             <>
               <FormInfo
                 id={this.id}
@@ -86,7 +106,7 @@ class NewProcess extends React.Component {
                 Edit={this.Edit}
               />
             </>
-          ) : null}
+          )}
         </S.Container>
       </>
     );

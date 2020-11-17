@@ -45,19 +45,6 @@ class FormInfo extends React.Component {
     // this.updateProcess();
   }
 
-  // updateProcess() {
-  //   this.process = {
-  //     process: {
-  //       aid_name: this.state.aid_name,
-  //       aid_quantity: this.state.aid_quantity,
-  //       title: this.state.title,
-  //       inprogress: this.state.inprogress,
-  //       date_begin: this.state.date_begin,
-  //       date_end: this.state.date_end,
-  //     },
-  //   };
-  // }
-
   handleChange = (e) => this.setState(e);
 
   handleChange = (e) => {
@@ -66,12 +53,6 @@ class FormInfo extends React.Component {
       this.props.onChange(this.state);
     });
   };
-
-  // handleChangeProcess = (e) => {
-  //   this.setState({ process: { [e.target.name]: e.target.value } }, () => {
-  //     this.props.onChange(this.state);
-  //   });
-  // };
 
   render() {
     return (
