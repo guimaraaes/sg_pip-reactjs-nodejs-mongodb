@@ -28,19 +28,6 @@ class NewProcess extends React.Component {
       this.props.onChange(this.state);
     }
   }
-
-  async Save() {
-    await api.post("/process", {
-      aid_id: this.state.aid_id,
-      aid_name: this.state.aid_name,
-      aid_quantity: this.state.aid_quantity,
-      title: this.state.title,
-      inprogress: true,
-      date_begin: this.state.date_begin,
-      date_end: this.state.date_end,
-    });
-  }
-
   async loadProcess() {
     await api.get(`/process/` + this.id).then((response) => {
       this.setState({
@@ -56,7 +43,17 @@ class NewProcess extends React.Component {
       });
     });
   }
-
+  async Save() {
+    await api.post("/process", {
+      aid_id: this.state.aid_id,
+      aid_name: this.state.aid_name,
+      aid_quantity: this.state.aid_quantity,
+      title: this.state.title,
+      inprogress: true,
+      date_begin: this.state.date_begin,
+      date_end: this.state.date_end,
+    });
+  }
   async Edit() {
     await api.put("/process/" + this.id, {
       aid_id: this.state.aid_id,
@@ -68,6 +65,7 @@ class NewProcess extends React.Component {
       date_end: this.state.date_end,
     });
   }
+
   render() {
     return (
       <>

@@ -82,6 +82,7 @@ class Process extends React.Component {
       this.setState({ students: respose.data });
     });
   }
+
   async loadStudentsInfo() {
     await api
       .get(

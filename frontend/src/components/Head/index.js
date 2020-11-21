@@ -121,7 +121,7 @@ class Head extends React.Component {
             </Button>
           ) : (
             <Button>
-              <a href={"/new-process/" + this.props.id}>
+              <a href={"/edit-process/" + this.props.id}>
                 editar <Image src={edit}></Image>
               </a>
             </Button>

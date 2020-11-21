@@ -89,29 +89,6 @@ class Home extends React.Component {
       });
   }
 
-  // async loadStudents() {
-  //   await api
-  //     .get(
-  //       `/student_request/result_search/` +
-  //         this.state.name_student_search +
-  //         `?page=` +
-  //         this.state.page
-  //     )
-  //     .then((respose) => {
-  //       this.setState({ students: respose.data });
-  //     });
-  // }
-
-  // async loadStudentsInfo() {
-  //   await api
-  //     .get(
-  //       `student_request/student_on_process/student_info/` +
-  //         this.state.name_student_search
-  //     )
-  //     .then((respose) => {
-  //       this.setState({ info: respose.data });
-  //     });
-  // }
   render() {
     return (
       <>

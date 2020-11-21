@@ -4,7 +4,6 @@ import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
 import CurrencyInput from "react-currency-input";
 import add from "../../assets/add.png";
 import remove from "../../assets/remove.png";
-import api from "../../services/api";
 import * as S from "./styles";
 
 require("moment/locale/pt.js");
@@ -12,29 +11,28 @@ require("moment/locale/pt.js");
 class FormSubmited extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       student_request: [],
-      process: [],
-      process2: [1, 2],
 
       count: 0,
-      name_cp: [],
-      name: null,
-
-      parentesco_cp: [],
+      p_name: "",
       parentesco: null,
-
-      age_cp: [],
       age: [],
-
-      occupation_cp: [],
       occupation: null,
-
-      monthly_income_cp: [],
       monthly_income: null,
 
-      motivation: "",
+      //student request
+      name: this.props.name,
+      status_coordinator: this.props.status_coordinator,
+      status_coordinator_description: this.props.status_coordinator_description,
+      aid_name: this.props.aid_name,
+      parent_name: this.props.parent_name,
+      parent_date_born: this.props.parent_date_born,
+      parent_rent: this.props.parent_rent,
+      parent_profession: this.props.parent_profession,
+      motivation: this.props.motivation,
+      quiz: this.props.quiz,
+      documents: this.props.documents,
     };
 
     this.annex_degree = null;
@@ -47,41 +45,15 @@ class FormSubmited extends React.Component {
     this.check = null;
     this.validated = 1;
     this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    this.loadProcess();
   }
+
+  // handleChange = (e) => this.setState(e);
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
       this.props.onChange(this.state);
     });
-    // if (e.target.value) {
-    //   const value = e.target.value;
-    //   this.setState({
-    //     [e.target.name]: value,
-    //   });
-    // } else {
-    //   const value = e.target.value;
-    //   this.setState({
-    //     [e.target.name]: null,
-    //   });
-    // }
   };
-
-  async loadProcess() {
-    await api.get(`/process/` + this.props.id).then((respose) => {
-      this.setState({ process: respose.data });
-    });
-  }
-
-  // handleSubmit = (event) => {
-  //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false) {
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   }
-
-  //   this.setValidated(true);
-  // };
 
   render() {
     return (
@@ -93,24 +65,27 @@ class FormSubmited extends React.Component {
             onSubmit={this.handleSubmit}
           >
             <Form.Group>
-              <FormControl
-                placeholder={this.state.student_request.name}
-                disabled
-              />
+              <FormControl placeholder={this.state.name} disabled />
             </Form.Group>
+
             <Form.Group controlId="exampleForm.SelectCustomSizeLg">
-              <Form.Label>BOLSA</Form.Label>
+              <Form.Label>BOLSA DO PROCESSO {this.props.title}</Form.Label>
               <Form.Control as="select" required>
                 <option value="" disabled selected>
                   Escolher bolsa
                 </option>
-                {this.state.process2.map((i) => {
-                  return (
-                    <>
-                      <option>Bolsa i</option>
-                    </>
-                  );
-                })}
+                {String(this.props.aid_name)
+                  .split(",")
+                  .map((currElement, index) => {
+                    return (
+                      <>
+                        <option>
+                          Bolsa {currElement}:
+                          {String(this.props.aid_quantity).split(",")[index]}
+                        </option>
+                      </>
+                    );
+                  })}
               </Form.Control>
             </Form.Group>
             <Form.Label>COMPOSIÇÃO FAMILIAR</Form.Label>
@@ -118,8 +93,8 @@ class FormSubmited extends React.Component {
               <Form.Group className="p-0 mr-2" md={4} as={Col}>
                 <FormControl
                   placeholder="nome (parentesco)"
-                  name="name"
-                  value={this.state.name}
+                  name="p_name"
+                  value={this.state.p_name}
                   onChange={this.handleChange}
                   required
                 />
@@ -165,7 +140,7 @@ class FormSubmited extends React.Component {
                     <Button
                       className="buttonAdd"
                       disabled={
-                        !!this.state.name &&
+                        !!this.state.p_name &&
                         this.state.age &&
                         this.state.occupation &&
                         this.state.monthly_income
@@ -184,7 +159,7 @@ class FormSubmited extends React.Component {
                           monthly_income_cp: this.state.monthly_income_cp.concat(
                             this.state.monthly_income
                           ),
-                          name: [],
+                          p_name: [],
 
                           age: [],
                           occupation: null,
@@ -202,12 +177,12 @@ class FormSubmited extends React.Component {
                     <Button
                       className="buttonAdd"
                       disabled={
-                        !!this.state.name && this.state.age ? false : true
+                        !!this.state.p_name && this.state.age ? false : true
                       }
                       onClick={() =>
                         this.setState({
                           count: this.state.count + 1,
-                          name_cp: this.state.name_cp.concat(this.state.name),
+                          name_cp: this.state.name_cp.concat(this.state.p_name),
 
                           age_cp: this.state.age_cp.concat(this.state.age),
                           occupation_cp: this.state.occupation_cp.concat(
@@ -216,7 +191,7 @@ class FormSubmited extends React.Component {
                           monthly_income_cp: this.state.monthly_income_cp.concat(
                             this.state.monthly_income
                           ),
-                          name: [],
+                          p_name: [],
 
                           age: [],
                           occupation: null,
@@ -230,68 +205,80 @@ class FormSubmited extends React.Component {
                 </>
               )}
             </InputGroup>
-            {this.state.name_cp.map((currElement, index) => {
-              return (
-                <InputGroup className="mb-3">
-                  <Form.Group className="p-0 mr-2" md={4} as={Col}>
-                    <FormControl placeholder={currElement} disabled />
-                  </Form.Group>
-                  <Form.Group className="p-0 mr-2">
-                    <FormControl
-                      placeholder={moment(this.state.age_cp[index]).format("L")}
-                      disabled
-                    />
-                  </Form.Group>
-                  {moment().format("YYYY") -
-                    moment(this.state.age_cp[index]).format("YYYY") >=
-                  18 ? (
-                    <>
-                      <Form.Group className="p-0 mr-2" md={2} as={Col}>
-                        <FormControl
-                          placeholder={this.state.monthly_income_cp[index]}
-                          disabled
-                        />
-                      </Form.Group>
-                      <Form.Group className="p-0 mr-2" as={Col}>
-                        <FormControl
-                          placeholder={this.state.occupation_cp[index]}
-                          disabled
-                        />
-                      </Form.Group>
-                    </>
-                  ) : null}
+            {String(this.props.parent_name)
+              .split(",")
+              .map((currElement, index) => {
+                return (
+                  <InputGroup className="mb-3">
+                    <Form.Group className="p-0 mr-2" md={4} as={Col}>
+                      <FormControl placeholder={currElement} disabled />
+                    </Form.Group>
+                    <Form.Group className="p-0 mr-2">
+                      <FormControl
+                        placeholder={moment(
+                          String(this.props.parent_date_born).split(",")[index]
+                        ).format("L")}
+                        disabled
+                      />
+                    </Form.Group>
+                    {moment().format("YYYY") -
+                      moment(
+                        String(this.props.age_cp).split(",")[index]
+                      ).format("YYYY") >=
+                    18 ? (
+                      <>
+                        <Form.Group className="p-0 mr-2" md={2} as={Col}>
+                          <FormControl
+                            placeholder={
+                              String(this.props.monthly_income_cp).split(",")[
+                                index
+                              ]
+                            }
+                            disabled
+                          />
+                        </Form.Group>
+                        <Form.Group className="p-0 mr-2" as={Col}>
+                          <FormControl
+                            placeholder={
+                              String(this.props.occupation_cp).split(",")[index]
+                            }
+                            disabled
+                          />
+                        </Form.Group>
+                      </>
+                    ) : null}
 
-                  <Form.Group>
-                    <Button
-                      className="buttonAdd"
-                      onClick={() =>
-                        this.setState({
-                          count: this.state.count - 1,
+                    <Form.Group>
+                      <Button
+                        className="buttonAdd"
+                        onClick={() =>
+                          this.setState({
+                            count: this.state.count - 1,
 
-                          name_cp: this.state.name_cp.filter(
-                            (e, i) => i !== index
-                          ),
+                            name_cp: this.state.name_cp.filter(
+                              (e, i) => i !== index
+                            ),
 
-                          age_cp: this.state.age_cp.filter(
-                            (e, i) => i !== index
-                          ),
-                          occupation_cp: this.state.occupation_cp.filter(
-                            (e, i) => i !== index
-                          ),
+                            age_cp: this.state.age_cp.filter(
+                              (e, i) => i !== index
+                            ),
+                            occupation_cp: this.state.occupation_cp.filter(
+                              (e, i) => i !== index
+                            ),
 
-                          monthly_income_cp: this.state.monthly_income_cp.filter(
-                            (e, i) => i !== index
-                          ),
-                        })
-                      }
-                    >
-                      <img src={remove}></img>
-                    </Button>
-                  </Form.Group>
-                  <Form.File.Input />
-                </InputGroup>
-              );
-            })}
+                            monthly_income_cp: this.state.monthly_income_cp.filter(
+                              (e, i) => i !== index
+                            ),
+                          })
+                        }
+                      >
+                        <img src={remove}></img>
+                      </Button>
+                    </Form.Group>
+                    <Form.File.Input />
+                  </InputGroup>
+                );
+              })}
             <Form.Group>
               <Form.Label>MOTIVAÇÃO PARA SER BOLSISTA</Form.Label>
               <Form.Control

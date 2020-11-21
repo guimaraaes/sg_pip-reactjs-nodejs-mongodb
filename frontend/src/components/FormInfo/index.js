@@ -21,35 +21,20 @@ class FormInfo extends React.Component {
       date_end: this.props.date_end,
     };
     this.title = this.props.title;
-
-    // (this.state.title: this.props.process.title),
-    // this.process = {
-    //   process: {
-    //     aid_name: this.state.aid_name,
-    //     aid_quantity: this.state.aid_quantity,
-    //     title: this.state.title,
-    //     inprogress: this.state.inprogress,
-    //     date_begin: this.state.date_begin,
-    //     date_end: this.state.date_end,
-    //   },
-    // };
     this.id = this.props.id;
 
     this.moradiaFamiliarCampus = null;
     this.validated = 1;
 
     this.handleChange = this.handleChange.bind(this);
-    // this.handleChangeProcess = this.handleChangeProcess.bind(this);
     this.Save = this.props.Save.bind(this);
     this.Edit = this.props.Edit.bind(this);
-    // this.updateProcess();
   }
 
   handleChange = (e) => this.setState(e);
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
-      // this.updateProcess();
       this.props.onChange(this.state);
     });
   };

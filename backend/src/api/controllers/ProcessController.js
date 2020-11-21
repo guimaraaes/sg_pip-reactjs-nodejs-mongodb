@@ -7,7 +7,7 @@ class ProcessController {
 
     await ProcessModel.find()
       // .select({ _id: 1, inprogress: 1, title: 1 })
-      .sort({ inprogress: -1 })
+      .sort({ inprogress: -1, title: -1 })
       .skip((page - 1) * 8)
       .limit(8)
       .then((response) => {
