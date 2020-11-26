@@ -43,7 +43,7 @@ Discente
 - [ ] Consultar processos
 - [ ] Realizar submissão em processos
 - [ ] Cadastrar documentos .pdf
-- [ ] Envio de e-mail para o discente
+<!-- - [ ] Envio de e-mail para o discente -->
 
 Geral
 

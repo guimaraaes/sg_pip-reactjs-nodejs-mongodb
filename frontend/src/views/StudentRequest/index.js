@@ -22,9 +22,11 @@ class StudentRequest extends React.Component {
       // parent_rent: [],
       // parent_profession: [],
       // motivation: "",
-      // quiz: [],
+      quiz: [0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       // documents: [],
     };
+    this.Edit = this.Edit.bind(this);
+
     this.loadProcess();
     this.loadStudentRequest();
   }
@@ -34,7 +36,6 @@ class StudentRequest extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(this.state);
     }
-    // this.loadStudentRequest();
   }
 
   async loadProcess() {
@@ -56,30 +57,54 @@ class StudentRequest extends React.Component {
           status_coordinator: response.data.status_coordinator,
           status_coordinator_description:
             response.data.status_coordinator_description,
-          aid_name_selected: response.data.aid_name,
+          aid_name_selected: response.data.aid_name_selected,
           parent_name: response.data.parent_name,
           parent_date_born: response.data.parent_date_born,
           parent_rent: response.data.parent_rent,
           parent_profession: response.data.parent_profession,
           motivation: response.data.motivation,
-          quiz: response.data.quiz,
+          quiz: String(response.data.quiz)
+            .split(",")
+            .map((i) => {
+              return Number(i);
+            }),
           documents: response.data.documents,
         });
       });
+  }
+
+  async Edit() {
+    await api.put(`/student_request/` + this.id_studentrequest, {
+      name: "Francisca Silva",
+      id_process: this.id_process,
+      status_coordinator: this.state.status_coordinator,
+      status_coordinator_description: this.state.status_coordinator_description,
+      aid_name_selected: this.state.aid_name_selected,
+      parent_name: this.state.parent_name,
+      parent_date_born: this.state.parent_date_born,
+      parent_rent: this.state.parent_rent,
+      parent_profession: this.state.parent_profession,
+      motivation: this.state.motivation,
+      quiz: this.state.quiz,
+      documents: this.state.documents,
+    });
   }
   render() {
     return (
       <>
         <Header />
+
         <S.Container>
           {/* {this.state.motivation} */}
           {/* {this.id_studentrequest}
           {this.state.name} */}
-
+          {/* {this.state.parent_name} */}
+          {/* {this.state.aid_name_selected} */}
           {this.state.name ? (
             <>
               <FormSubmited
                 id={this.id}
+                aid_name_selected={this.state.aid_name_selected}
                 aid_name={this.state.aid_name}
                 aid_quantity={this.state.aid_quantity}
                 title={this.state.title}
@@ -97,6 +122,7 @@ class StudentRequest extends React.Component {
                 quiz={this.state.quiz}
                 documents={this.state.documents}
                 onChange={this.handleChange}
+                Edit={this.Edit}
               />
             </>
           ) : null}

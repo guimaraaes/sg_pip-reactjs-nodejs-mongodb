@@ -96,12 +96,11 @@ class Process extends React.Component {
       });
   }
 
-  // handleChange = (e) => this.setState(e);
-
   render() {
     return (
       <>
         <Header />
+        {this.state.process.title ? null : 1}
         <S.Container>
           <S.Head className="mb-5">
             <Head

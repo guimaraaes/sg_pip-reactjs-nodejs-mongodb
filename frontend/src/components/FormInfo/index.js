@@ -13,8 +13,12 @@ class FormInfo extends React.Component {
       aid: "",
       quantity: "",
 
-      aid_name: [this.props.aid_name],
-      aid_quantity: [this.props.aid_quantity],
+      aid_name: this.props.aid_name,
+      aid_quantity: this.props.aid_quantity,
+      // aid_name: String(this.props.aid_name).split(","),
+      // aid_quantity: String(this.props.aid_quantity).split(","),
+      // aid_name: [this.props.aid_name],
+      // aid_quantity: [this.props.aid_quantity],
       title: this.props.title,
       inprogress: this.props.inprogress,
       date_begin: this.props.date_begin,
@@ -29,9 +33,10 @@ class FormInfo extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.Save = this.props.Save.bind(this);
     this.Edit = this.props.Edit.bind(this);
+    this.FormValidated = false;
   }
 
-  handleChange = (e) => this.setState(e);
+  // handleChange = (e) => this.setState(e);
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
@@ -43,12 +48,15 @@ class FormInfo extends React.Component {
     return (
       <>
         <S.Container>
-          {/* {this.id} */}
-          {/* {this.title} */}
-          {/* {this.props.title}props */}
-          {/* {this.state.title} */}
-          {/* {(this.state.title = this.props.process.title)} */}
-          {/* {(this.state.title = this.props.process.title)} */}
+          {
+            (this.FormValidated =
+              this.state.date_begin &&
+              this.state.date_end &&
+              this.state.title &&
+              this.state.aid_name[0]
+                ? true
+                : false)
+          }
           <Form
             noValidate
             validated={this.validated}
@@ -136,65 +144,78 @@ class FormInfo extends React.Component {
 
                         aid: "",
                         quantity: "",
+                      },
+                      () => {
+                        this.props.onChange(this.state);
                       }
-                      // () => {
-                      //   this.updateProcess();
-                      //   this.props.onChange(this.process);
-                      // }
                     )
                   }
                 >
                   <img src={add}></img>
                 </Button>
               </Form.Group>
+              {this.state.aid_name.lenght > 0 ? 1 : this.state.aid_name.lenght}
             </InputGroup>
             {/* {Array.from(this.state.process.aid_name)} */}
-            {String(this.state.aid_name)
-              .split(",")
-              .map((currElement, index) => {
-                return (
-                  <InputGroup>
-                    <Form.Group className="p-0 mr-2" md={5} as={Col}>
-                      <FormControl placeholder={currElement} disabled />
-                    </Form.Group>
-                    <Form.Group>
-                      <FormControl
-                        placeholder={
-                          String(this.state.aid_quantity).split(",")[index]
-                        }
-                        disabled
-                      />
-                    </Form.Group>
+            {this.state.aid_name.map((currElement, index) => {
+              return (
+                <InputGroup>
+                  <Form.Group className="p-0 mr-2" md={5} as={Col}>
+                    <FormControl placeholder={currElement} disabled />
+                  </Form.Group>
+                  <Form.Group>
+                    <FormControl
+                      placeholder={this.state.aid_quantity[index]}
+                      disabled
+                    />
+                  </Form.Group>
 
-                    <Form.Group>
-                      <Button
-                        className="buttonAdd"
-                        onClick={() =>
-                          this.setState({
+                  <Form.Group>
+                    <Button
+                      className="buttonAdd"
+                      onClick={() =>
+                        this.setState(
+                          {
                             count: this.state.count - 1,
-
                             aid_name: this.state.aid_name.filter(
                               (e, i) => i !== index
                             ),
                             aid_quantity: this.state.aid_quantity.filter(
                               (e, i) => i !== index
                             ),
-                          })
-                        }
-                      >
-                        <img src={remove}></img>
-                      </Button>
-                    </Form.Group>
-                  </InputGroup>
-                );
-              })}
+                          },
+                          () => {
+                            this.props.onChange(this.state);
+                          },
+                          () => {
+                            this.props.onChange(this.state);
+                          }
+                        )
+                      }
+                    >
+                      <img src={remove}></img>
+                    </Button>
+                  </Form.Group>
+                </InputGroup>
+              );
+            })}
           </Form>
           {this.id ? (
-            <Button className="Button" variant="primary" onClick={this.Edit}>
+            <Button
+              className="Button"
+              variant="primary"
+              onClick={this.Edit}
+              disabled={this.FormValidated ? false : true}
+            >
               EDITAR
             </Button>
           ) : (
-            <Button className="Button" variant="primary" onClick={this.Save}>
+            <Button
+              className="Button"
+              variant="primary"
+              onClick={this.Save}
+              disabled={this.FormValidated ? false : true}
+            >
               CADASTRAR
             </Button>
           )}

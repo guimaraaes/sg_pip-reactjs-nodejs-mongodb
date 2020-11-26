@@ -91,6 +91,9 @@ class NewProcess extends React.Component {
             ) : null
           ) : (
             <>
+              {this.state.aid_name
+                ? null
+                : ((this.state.aid_name = []), (this.state.aid_quantity = []))}
               <FormInfo
                 id={this.id}
                 aid_name={this.state.aid_name}
