@@ -54,8 +54,8 @@ class FormInfo extends React.Component {
               this.state.date_end &&
               this.state.title &&
               this.state.aid_name[0]
-                ? true
-                : false)
+                ? false
+                : true)
           }
           <Form
             noValidate
@@ -214,7 +214,7 @@ class FormInfo extends React.Component {
               className="Button"
               variant="primary"
               onClick={this.Save}
-              disabled={this.FormValidated ? false : true}
+              disabled={this.FormValidated}
             >
               CADASTRAR
             </Button>

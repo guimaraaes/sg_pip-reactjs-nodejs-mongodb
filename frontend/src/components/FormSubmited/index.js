@@ -53,14 +53,14 @@ class FormSubmited extends React.Component {
       student_assistance: this.props.quiz[10],
       paid_activity: this.props.quiz[11],
     };
-
-    this.annex_degree = null;
-    this.annex_paid_activity = null;
-    this.annex_social_program = null;
-    this.annex_bpc = null;
-    this.annex_chronic_disease = null;
-
     this.annex_family_home = null;
+
+    this.annex_degree = this.props.quiz[9] === 2 || this.props.quiz[9] === 3;
+    this.annex_paid_activity = this.props.quiz[11] != 6;
+    this.annex_social_program = this.props.quiz[5] === 1;
+    this.annex_bpc = this.props.quiz[6] === 1;
+    this.annex_chronic_disease = this.props.quiz[7] === 1;
+
     this.check = null;
     this.validated = 1;
     this.handleChange = this.handleChange.bind(this);
@@ -86,6 +86,7 @@ class FormSubmited extends React.Component {
       this.state.paid_activity,
     ];
   }
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
       this.loadQuiz();
@@ -97,6 +98,25 @@ class FormSubmited extends React.Component {
     return (
       <>
         <S.Container>
+          {
+            (this.FormValidated =
+              this.state.race &&
+              this.state.housing_distance &&
+              this.state.zone &&
+              this.state.family_home_in_campus_city &&
+              this.state.campus_city_housing &&
+              this.state.social_program &&
+              this.state.bpc &&
+              this.state.chronic_disease &&
+              this.state.high_school &&
+              this.state.degree &&
+              this.state.student_assistance &&
+              this.state.paid_activity &&
+              this.state.motivation &&
+              !this.annex_bpc
+                ? false
+                : true)
+          }
           <Form
             noValidate
             validated={this.validated}
@@ -142,7 +162,6 @@ class FormSubmited extends React.Component {
                   required
                 />
               </Form.Group>
-              {this.state.p_name}
               <Form.Group className="p-0 mr-2">
                 <FormControl
                   placeholder="nascimento"
@@ -495,11 +514,11 @@ class FormSubmited extends React.Component {
                   value="1"
                   defaultChecked={this.state.family_home_in_campus_city === 1}
                   required
-                  onChange={() =>
-                    this.setState({
-                      count: (this.annex_family_home = null),
-                    })
-                  }
+                  // onChange={() =>
+                  //   this.setState({
+                  //     count: (this.annex_family_home = null),
+                  //   })
+                  // }
                 />
                 <Form.Check
                   type="radio"
@@ -507,11 +526,11 @@ class FormSubmited extends React.Component {
                   name="family_home_in_campus_city"
                   value="2"
                   defaultChecked={this.state.family_home_in_campus_city === 2}
-                  onChange={() =>
-                    this.setState({
-                      count: (this.annex_family_home = 1),
-                    })
-                  }
+                  // onChange={() =>
+                  //   this.setState({
+                  //     count: (this.annex_family_home = null),
+                  //   })
+                  // }
                 />
               </Col>
             </Form.Group>
@@ -953,6 +972,7 @@ class FormSubmited extends React.Component {
             className="Button"
             variant="primary"
             onClick={this.Edit}
+            disabled={this.FormValidated}
           >
             SALVAR
           </Button>

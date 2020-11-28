@@ -37,8 +37,8 @@ class Process extends React.Component {
   componentDidUpdate() {
     if (this.props.onChange) {
       this.props.onChange(this.state);
+      this.loadStudents();
     }
-    this.loadStudents();
   }
   handlePageChange(pageNumber) {
     this.setState({ page: pageNumber });
@@ -69,12 +69,12 @@ class Process extends React.Component {
   async loadStudents() {
     this.state.name_student_search != ""
       ? (this.url =
-          `/student_request/students_on_process/` +
+          `/student_request/on_process/` +
           this.id +
-          "/search/" +
+          "/" +
           this.state.name_student_search)
       : (this.url =
-          `/student_request/students_on_process/` +
+          `/student_request/on_process/` +
           this.id +
           "?page=" +
           this.state.page);
@@ -100,7 +100,6 @@ class Process extends React.Component {
     return (
       <>
         <Header />
-        {this.state.process.title ? null : 1}
         <S.Container>
           <S.Head className="mb-5">
             <Head

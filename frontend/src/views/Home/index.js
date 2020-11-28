@@ -38,7 +38,7 @@ class Home extends React.Component {
     this.state.name_student_search
       ? this.loadStudentsInfo()
       : this.loadProcessesInfo();
-
+    // this.loadProcessesInfo();
     this.loadProcesses();
     // this.loadStudents();
   }
@@ -50,6 +50,7 @@ class Home extends React.Component {
       this.props.onChange(this.state);
     }
   }
+
   handlePageChange(pageNumber) {
     this.setState({ page: pageNumber });
     this.state.title_process_search
