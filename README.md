@@ -47,4 +47,10 @@ Discente
 
 Geral
 
+- [ ] formata data para DateTime
+- [ ] descartar um documento e pedir confirmação
+- [ ] visualizar documentos
+- [ ] boolean para documento selecionado
+- [ ] vincular documento por typo e pelo id do discente
+- [ ] id discente único, mas participando de vários processes
 - [ ] Mensagens de alerta: erro ou operação concluída

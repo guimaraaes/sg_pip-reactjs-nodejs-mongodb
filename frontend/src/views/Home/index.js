@@ -48,6 +48,7 @@ class Home extends React.Component {
   componentDidUpdate() {
     if (this.props.onChange) {
       this.props.onChange(this.state);
+      this.loadProcesses();
     }
   }
 
@@ -65,9 +66,9 @@ class Home extends React.Component {
     this.props.history.go();
   }
 
-  componentDidUpdate() {
-    this.state.name_student_search ? this.loadStudents() : this.loadProcesses();
-  }
+  // componentDidUpdate() {
+  //   this.state.name_student_search ? this.loadStudents() : this.loadProcesses();
+  // }
 
   async loadProcesses() {
     this.state.title_process_search

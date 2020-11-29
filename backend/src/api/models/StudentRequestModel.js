@@ -1,6 +1,7 @@
 const mongoose = require("../../config/database");
 
 const Schema = mongoose.Schema;
+
 const StudentRequestModel = new Schema({
   name: { type: String, require: true },
   id_process: { type: String, require: true },

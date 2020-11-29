@@ -14,6 +14,7 @@ class StudentRequest extends React.Component {
       //student_request
       p_name: "",
       name: "",
+      file: 1,
       // status_coordinator: false,
       // status_coordinator_description: "",
       // aid_name: [],
@@ -22,10 +23,15 @@ class StudentRequest extends React.Component {
       // parent_rent: [],
       // parent_profession: [],
       // motivation: "",
-      quiz: [0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      //grupo_familiar, moradia_campus, programa_social, bpc, doença_cronica, ensino médio, escolaridade, atividade remunerada
+      documents: [null, null, null, null, null, null, null, null],
+      quiz: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       // documents: [],
     };
     this.Edit = this.Edit.bind(this);
+    this.Upload = this.Upload.bind(this);
+    this.onChange = this.onChange.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
 
     this.loadProcess();
     this.loadStudentRequest();
@@ -68,7 +74,8 @@ class StudentRequest extends React.Component {
             .map((i) => {
               return Number(i);
             }),
-          documents: response.data.documents,
+
+          documents: String(response.data.documents).split(","),
         });
       });
   }
@@ -89,21 +96,36 @@ class StudentRequest extends React.Component {
       documents: this.state.documents,
     });
   }
+  onChange = (e) => {
+    // alert(e.target.files);
+    this.setState({ file: e.target.files[0] });
+  };
+  async Upload(e) {
+    const formData = new FormData();
+    formData.append("file", this.state.file);
+    const position = e.target.value;
+    alert(e.target.value);
+    // this.file = String(e.target.files[0].name);
+    // this.setState({ file: e.target.files[0].name });
+    await api.post("/student_request/upload", formData, {}).then((response) => {
+      this.state.documents[position] = response.data.filename;
+      this.setState({
+        filename: response.data.filename,
+      });
+    });
+  }
+
   render() {
     return (
       <>
         <Header />
 
         <S.Container>
-          {/* {this.state.motivation} */}
-          {/* {this.id_studentrequest}
-          {this.state.name} */}
-          {/* {this.state.parent_name} */}
-          {/* {this.state.aid_name_selected} */}
           {this.state.name ? (
             <>
               <FormSubmited
                 id={this.id}
+                file={this.state.file}
                 aid_name_selected={this.state.aid_name_selected}
                 aid_name={this.state.aid_name}
                 aid_quantity={this.state.aid_quantity}
@@ -123,6 +145,7 @@ class StudentRequest extends React.Component {
                 documents={this.state.documents}
                 onChange={this.handleChange}
                 Edit={this.Edit}
+                Upload={this.Upload}
               />
             </>
           ) : null}

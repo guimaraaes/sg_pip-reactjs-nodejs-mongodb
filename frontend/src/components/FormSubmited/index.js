@@ -1,11 +1,12 @@
 import moment from "moment";
 import React from "react";
 import { Button, Col, Form, FormControl, InputGroup } from "react-bootstrap";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import CurrencyInput from "react-currency-input";
 import add from "../../assets/add.png";
 import remove from "../../assets/remove.png";
+import ButtonAnnex from "../ButtonAnnex";
 import * as S from "./styles";
-
 require("moment/locale/pt.js");
 
 class FormSubmited extends React.Component {
@@ -53,23 +54,37 @@ class FormSubmited extends React.Component {
       student_assistance: this.props.quiz[10],
       paid_activity: this.props.quiz[11],
     };
-    this.annex_family_home = null;
 
-    this.annex_degree = this.props.quiz[9] === 2 || this.props.quiz[9] === 3;
-    this.annex_paid_activity = this.props.quiz[11] != 6;
     this.annex_social_program = this.props.quiz[5] === 1;
     this.annex_bpc = this.props.quiz[6] === 1;
     this.annex_chronic_disease = this.props.quiz[7] === 1;
+    this.annex_degree = this.props.quiz[9] === 2 || this.props.quiz[9] === 3;
+    this.annex_paid_activity = this.props.quiz[11] != 6;
 
+    this.annexed_family_home = this.state.documents[0];
+    this.annexed_campus_city_housing =
+      this.state.documents[1] && this.state.campus_city_housing === 2;
+    this.annexed_social_program =
+      this.props.quiz[5] === 1 && this.state.documents[3];
+    this.annexed_bpc = this.annex_bpc && this.state.documents[3];
+    this.annexed_chronic_disease =
+      this.chronic_disease && this.state.documents[4];
+
+    this.annexed_high_school = this.state.documents[5];
+
+    this.annexed_degree = this.props.quiz[6] && this.state.documents[6];
+    this.annexed_paid_activity =
+      this.state.paid_activity && this.state.documents[7];
     this.check = null;
     this.validated = 1;
+
     this.handleChange = this.handleChange.bind(this);
     this.Edit = this.props.Edit.bind(this);
-
+    this.Upload = this.props.Upload.bind(this);
     this.loadQuiz();
   }
 
-  // handleChange = (e) => this.setState(e);
+  //
   loadQuiz() {
     this.state.quiz = [
       this.state.race,
@@ -86,10 +101,23 @@ class FormSubmited extends React.Component {
       this.state.paid_activity,
     ];
   }
+  onChange = (e) => {
+    // alert(e.target.files);
+    this.setState({ file: e.target.files[0] }, () => {
+      this.props.onChange(this.state);
+    });
+  };
+
+  handleChangeButton = (e) => {
+    this.loadQuiz();
+    this.setState(e);
+    this.props.onChange(this.state);
+  };
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
       this.loadQuiz();
+
       this.props.onChange(this.state);
     });
   };
@@ -112,9 +140,16 @@ class FormSubmited extends React.Component {
               this.state.degree &&
               this.state.student_assistance &&
               this.state.paid_activity &&
-              this.state.motivation &&
-              !this.annex_bpc
-                ? false
+              this.state.motivation
+                ? // this.annexed_family_home &&
+                  // // this.annexed_campus_city_housing &&
+                  // this.annexed_high_school &&
+                  // this.annexed_degree &&
+                  // this.annexed_paid_activity &&
+                  // this.annexed_social_program &&
+                  // this.annexed_bpc &&
+                  // this.annexed_chronic_disease
+                  false
                 : true)
           }
           <Form
@@ -436,7 +471,6 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-
             <Form.Group
               name="housing_distance"
               value={this.state.housing_distance}
@@ -534,7 +568,15 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            <Form.File.Input />
+            <ButtonAnnex
+              value="1"
+              documents={this.props.documents}
+              Upload={this.props.Upload}
+              handleChange={this.handleChangeButton}
+              FileChange={this.onChange}
+            >
+              dd
+            </ButtonAnnex>
             {this.state.quiz[3] == 2 ? (
               <Form.Group
                 name="campus_city_housing"
@@ -590,7 +632,15 @@ class FormSubmited extends React.Component {
                     defaultChecked={this.state.campus_city_housing === 6}
                   />
                 </Col>
-                <Form.File.Input />
+                <ButtonAnnex
+                  value="2"
+                  documents={this.props.documents}
+                  Upload={this.props.Upload}
+                  handleChange={this.handleChangeButton}
+                  FileChange={this.onChange}
+                >
+                  dd
+                </ButtonAnnex>
               </Form.Group>
             ) : (
               () => {
@@ -637,7 +687,17 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            {this.annex_social_program ? <Form.File.Input /> : null}
+            {this.annex_social_program ? (
+              <ButtonAnnex
+                value="3"
+                documents={this.props.documents}
+                Upload={this.props.Upload}
+                handleChange={this.handleChangeButton}
+                FileChange={this.onChange}
+              >
+                dd
+              </ButtonAnnex>
+            ) : null}
             <Form.Group
               name="bpc"
               value={this.state.bpc}
@@ -676,7 +736,17 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            {this.annex_bpc ? <Form.File.Input /> : null}
+            {this.annex_bpc ? (
+              <ButtonAnnex
+                value="4"
+                documents={this.props.documents}
+                Upload={this.props.Upload}
+                handleChange={this.handleChangeButton}
+                FileChange={this.onChange}
+              >
+                dd
+              </ButtonAnnex>
+            ) : null}
             <Form.Group
               name="chronic_disease"
               value={this.state.chronic_disease}
@@ -718,7 +788,17 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            {this.annex_chronic_disease ? <Form.File.Input /> : null}
+            {this.annex_chronic_disease ? (
+              <ButtonAnnex
+                value="5"
+                documents={this.props.documents}
+                Upload={this.props.Upload}
+                handleChange={this.handleChangeButton}
+                FileChange={this.onChange}
+              >
+                dd
+              </ButtonAnnex>
+            ) : null}
             <Form.Group
               name="high_school"
               value={this.state.high_school}
@@ -759,7 +839,15 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            <Form.File.Input />
+            <ButtonAnnex
+              value="6"
+              documents={this.props.documents}
+              Upload={this.props.Upload}
+              handleChange={this.handleChangeButton}
+              FileChange={this.onChange}
+            >
+              dd
+            </ButtonAnnex>
             <Form.Group
               name="degree"
               value={this.state.degree}
@@ -800,7 +888,17 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            {this.annex_degree ? <Form.File.Input /> : null}
+            {this.annex_degree ? (
+              <ButtonAnnex
+                value="7"
+                documents={this.props.documents}
+                Upload={this.props.Upload}
+                handleChange={this.handleChangeButton}
+                FileChange={this.onChange}
+              >
+                dd
+              </ButtonAnnex>
+            ) : null}
             <Form.Group
               name="student_assistance"
               value={this.state.student_assistance}
@@ -931,7 +1029,17 @@ class FormSubmited extends React.Component {
                 />
               </Col>
             </Form.Group>
-            {this.annex_paid_activity ? <Form.File.Input /> : null}
+            {this.annex_paid_activity ? (
+              <ButtonAnnex
+                value="8"
+                documents={this.props.documents}
+                Upload={this.props.Upload}
+                handleChange={this.handleChangeButton}
+                FileChange={this.onChange}
+              >
+                dd
+              </ButtonAnnex>
+            ) : null}
             <Form.Group
               name="check"
               value={this.state.check}
