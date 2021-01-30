@@ -15,6 +15,7 @@ class StudentRequest extends React.Component {
       p_name: "",
       name: "",
       file: 1,
+      aid_name_selected: "",
       // status_coordinator: false,
       // status_coordinator_description: "",
       // aid_name: [],
@@ -24,18 +25,24 @@ class StudentRequest extends React.Component {
       // parent_profession: [],
       // motivation: "",
       //grupo_familiar, moradia_campus, programa_social, bpc, doença_cronica, ensino médio, escolaridade, atividade remunerada
+      documentsparent: [],
+      parent_name: [],
       documents: [null, null, null, null, null, null, null, null],
       quiz: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       // documents: [],
     };
+    // this.state.parent_name = [];
+
     this.Edit = this.Edit.bind(this);
     this.Upload = this.Upload.bind(this);
     this.onChange = this.onChange.bind(this);
     // this.handleChange = this.handleChange.bind(this);
-
+    // this.state.parent_name = [];
+    // this.state.parent_date_born = [];
     this.loadProcess();
     this.loadStudentRequest();
   }
+
   handleChange = (e) => this.setState(e);
 
   componentDidUpdate() {
@@ -68,6 +75,7 @@ class StudentRequest extends React.Component {
           parent_date_born: response.data.parent_date_born,
           parent_rent: response.data.parent_rent,
           parent_profession: response.data.parent_profession,
+          // documentsparent: response.data.documentsparent,
           motivation: response.data.motivation,
           quiz: String(response.data.quiz)
             .split(",")
@@ -91,6 +99,7 @@ class StudentRequest extends React.Component {
       parent_date_born: this.state.parent_date_born,
       parent_rent: this.state.parent_rent,
       parent_profession: this.state.parent_profession,
+      documentsparent: this.state.documentsparent,
       motivation: this.state.motivation,
       quiz: this.state.quiz,
       documents: this.state.documents,
@@ -104,11 +113,17 @@ class StudentRequest extends React.Component {
     const formData = new FormData();
     formData.append("file", this.state.file);
     const position = e.target.value;
-    alert(e.target.value);
+    const name = e.target.name;
+    alert(e.target.name);
+    // alert(e.target.value);
     // this.file = String(e.target.files[0].name);
     // this.setState({ file: e.target.files[0].name });
     await api.post("/student_request/upload", formData, {}).then((response) => {
-      this.state.documents[position] = response.data.filename;
+      // alert(response.data.filename);
+      if (name == "documents")
+        this.state.documents[position] = response.data.filename;
+      else this.state.documentsparent[position] = response.data.filename;
+
       this.setState({
         filename: response.data.filename,
       });
@@ -118,8 +133,14 @@ class StudentRequest extends React.Component {
   render() {
     return (
       <>
+        {/* {this.state.parent_name.length}
+        {this.state.parent_name.length == 0
+          ? ((this.state.parent_name = []), (this.state.parent_date_born = []))
+          : null} */}
         <Header />
-
+        {/* {this.state.name} */}
+        {/* {this.id_studentrequest ? this.loadStudentRequest() : null} */}
+        {/* aqqqqq{this.state.documentsparent.map((i) => i)} */}
         <S.Container>
           {this.state.name ? (
             <>
@@ -143,6 +164,7 @@ class StudentRequest extends React.Component {
                 motivation={this.state.motivation}
                 quiz={this.state.quiz}
                 documents={this.state.documents}
+                documentsparent={this.state.documentsparent}
                 onChange={this.handleChange}
                 Edit={this.Edit}
                 Upload={this.Upload}

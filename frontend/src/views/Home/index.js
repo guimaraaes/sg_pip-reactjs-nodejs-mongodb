@@ -1,7 +1,6 @@
 import React from "react";
 import { Row } from "react-bootstrap";
 import Pagination from "react-js-pagination";
-import GroupStudents from "../../components/GroupStudents";
 import Head from "../../components/Head/index";
 import Header from "../../components/Header/index";
 import Processes from "../../components/Processes";
@@ -13,7 +12,7 @@ class Home extends React.Component {
     super(props);
     this.params = new URLSearchParams(this.props.location.search);
     this.p = Number(this.params.get("page"));
-
+    this.student_mode = 0;
     this.state = {
       page: this.p === 0 ? 1 : this.p,
       processes: [],
@@ -98,6 +97,7 @@ class Home extends React.Component {
         <S.Container>
           <S.Head>
             <Head
+              student_mode={this.student_mode}
               title_process_search={this.state.title_process_search}
               name_student_search={this.state.name_student_search}
               action="new"
@@ -105,18 +105,11 @@ class Home extends React.Component {
             ></Head>
           </S.Head>
           <S.ProcessStudents>
-            {this.state.name_student_search ? (
-              <>
-                <GroupStudents students={this.state.students}></GroupStudents>
-              </>
-            ) : (
-              <>
-                <Processes
-                  processes={this.state.processes}
-                  onChange={this.handleChange}
-                ></Processes>
-              </>
-            )}
+            <Processes
+              student_mode={this.student_mode}
+              processes={this.state.processes}
+              onChange={this.handleChange}
+            ></Processes>
           </S.ProcessStudents>
           <S.Head>
             <Pagination

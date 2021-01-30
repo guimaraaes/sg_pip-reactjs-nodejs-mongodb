@@ -1,7 +1,7 @@
+import dateFormat from "dateformat";
 import React from "react";
 import { Button, Card } from "react-bootstrap";
 import * as S from "./styles";
-
 function CardProcess(props) {
   return (
     <>
@@ -19,7 +19,7 @@ function CardProcess(props) {
           </S.CardHeader>
           <Card.Body>
             <Card.Text>
-              data término: {props.date_end} <br />
+              data término: {dateFormat(props.date_end, "dd/mm/yyyy")} <br />
               bolsas ofertadas: {props.total_aid}
             </Card.Text>
           </Card.Body>

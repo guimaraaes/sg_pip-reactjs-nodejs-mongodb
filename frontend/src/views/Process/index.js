@@ -1,3 +1,4 @@
+import dateFormat from "dateformat";
 import React from "react";
 import { Row } from "react-bootstrap";
 import Pagination from "react-js-pagination";
@@ -112,6 +113,7 @@ class Process extends React.Component {
               loc={this.props.location.pathname}
             ></Head>
           </S.Head>
+
           <S.GroupStudentsContainer>
             <GroupStudents
               procura="Procurar por aluno"
@@ -130,8 +132,10 @@ class Process extends React.Component {
               linkClass="page-link"
             />
             <Row>
-              Data de início: {this.state.process.date_begin} - Data fim:
-              {this.state.process.date_end}
+              Data de início:{" "}
+              {dateFormat(this.state.process.date_begin, "dd/mm/yyyy")} - Data
+              fim:
+              {dateFormat(this.state.process.date_end, "dd/mm/yyyy")}
               <br />
               Total: {this.state.info.total} - Total ativo:
               {this.state.info.total_active}

@@ -14,7 +14,7 @@ class FormSubmited extends React.Component {
     super(props);
     this.state = {
       student_request: [],
-
+      name: "Vitor Maia",
       count: 0,
       p_name: "",
       parentesco: null,
@@ -28,14 +28,19 @@ class FormSubmited extends React.Component {
       status_coordinator_description: this.props.status_coordinator_description,
       aid_name_selected: this.props.aid_name_selected,
       aid_name: this.props.aid_name,
-      // parent_name: [this.props.parent_name],
+      // parent_name: this.props.parent_name,
       // parent_date_born: [this.props.parent_date_born],
       // parent_rent: [this.props.parent_rent],
       // parent_profession: [this.props.parent_profession],
-      parent_name: String(this.props.parent_name).split(","),
+
+      parent_name:
+        this.props.parent_name.length > 0
+          ? String(this.props.parent_name).split(",")
+          : this.props.parent_name,
       parent_date_born: String(this.props.parent_date_born).split(","),
       parent_rent: String(this.props.parent_rent).split(","),
       parent_profession: String(this.props.parent_profession).split(","),
+      documentsparent: this.props.documentsparent,
       motivation: this.props.motivation,
       quiz: this.props.quiz,
       documents: this.props.documents,
@@ -61,20 +66,6 @@ class FormSubmited extends React.Component {
     this.annex_degree = this.props.quiz[9] === 2 || this.props.quiz[9] === 3;
     this.annex_paid_activity = this.props.quiz[11] != 6;
 
-    this.annexed_family_home = this.state.documents[0];
-    this.annexed_campus_city_housing =
-      this.state.documents[1] && this.state.campus_city_housing === 2;
-    this.annexed_social_program =
-      this.props.quiz[5] === 1 && this.state.documents[3];
-    this.annexed_bpc = this.annex_bpc && this.state.documents[3];
-    this.annexed_chronic_disease =
-      this.chronic_disease && this.state.documents[4];
-
-    this.annexed_high_school = this.state.documents[5];
-
-    this.annexed_degree = this.props.quiz[6] && this.state.documents[6];
-    this.annexed_paid_activity =
-      this.state.paid_activity && this.state.documents[7];
     this.check = null;
     this.validated = 1;
 
@@ -101,6 +92,7 @@ class FormSubmited extends React.Component {
       this.state.paid_activity,
     ];
   }
+
   onChange = (e) => {
     // alert(e.target.files);
     this.setState({ file: e.target.files[0] }, () => {
@@ -109,15 +101,15 @@ class FormSubmited extends React.Component {
   };
 
   handleChangeButton = (e) => {
-    this.loadQuiz();
     this.setState(e);
+    this.loadQuiz();
+
     this.props.onChange(this.state);
   };
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value }, () => {
       this.loadQuiz();
-
       this.props.onChange(this.state);
     });
   };
@@ -141,15 +133,7 @@ class FormSubmited extends React.Component {
               this.state.student_assistance &&
               this.state.paid_activity &&
               this.state.motivation
-                ? // this.annexed_family_home &&
-                  // // this.annexed_campus_city_housing &&
-                  // this.annexed_high_school &&
-                  // this.annexed_degree &&
-                  // this.annexed_paid_activity &&
-                  // this.annexed_social_program &&
-                  // this.annexed_bpc &&
-                  // this.annexed_chronic_disease
-                  false
+                ? false
                 : true)
           }
           <Form
@@ -186,6 +170,12 @@ class FormSubmited extends React.Component {
                   })}
               </Form.Control>
             </Form.Group>
+            {/* 
+            {this.props.parent_name.length != 0
+              ? ((this.state.parent_name = []),
+                (this.state.parent_date_born = []))
+              : null}{" "}
+            */}
             <Form.Label>COMPOSIÇÃO FAMILIAR</Form.Label>
             <InputGroup className="mb-3">
               <Form.Group className="p-0 mr-2" md={4} as={Col}>
@@ -194,7 +184,7 @@ class FormSubmited extends React.Component {
                   name="p_name"
                   value={this.state.p_name}
                   onChange={this.handleChange}
-                  required
+                  required={this.props.parent_name.length > 0 ? false : true}
                 />
               </Form.Group>
               <Form.Group className="p-0 mr-2">
@@ -264,6 +254,10 @@ class FormSubmited extends React.Component {
                               this.state.monthly_income
                             ),
 
+                            documentsparent: this.state.documentsparent.concat(
+                              null
+                            ),
+
                             p_name: "",
                             age: "",
                             occupation: "",
@@ -305,6 +299,10 @@ class FormSubmited extends React.Component {
                               this.state.monthly_income
                             ),
 
+                            documentsparent: this.state.documentsparent.concat(
+                              0
+                            ),
+
                             p_name: "",
                             age: "",
                             occupation: "",
@@ -324,83 +322,97 @@ class FormSubmited extends React.Component {
             </InputGroup>
             {this.state.parent_name.map((currElement, index) => {
               return (
-                <InputGroup className="mb-3">
-                  <Form.Group className="p-0 mr-2" md={4} as={Col}>
-                    <FormControl placeholder={currElement} disabled />
-                  </Form.Group>
-                  <Form.Group className="p-0 mr-2">
-                    <FormControl
-                      placeholder={moment(
+                <>
+                  <InputGroup className="mt-3">
+                    <Form.Group className="p-0 mr-2" md={4} as={Col}>
+                      <FormControl placeholder={currElement} disabled />
+                    </Form.Group>
+                    <Form.Group className="p-0 mr-2">
+                      <FormControl
+                        placeholder={moment(
+                          String(this.props.parent_date_born).split(",")[index]
+                        ).format("L")}
+                        disabled
+                      />
+                    </Form.Group>
+                    {moment().format("YYYY") -
+                      moment(
                         String(this.props.parent_date_born).split(",")[index]
-                      ).format("L")}
-                      disabled
-                    />
-                  </Form.Group>
-                  {moment().format("YYYY") -
-                    moment(
-                      String(this.props.parent_date_born).split(",")[index]
-                    ).format("YYYY") >=
-                  18 ? (
-                    <>
-                      <Form.Group className="p-0 mr-2" md={2} as={Col}>
-                        <FormControl
-                          placeholder={
-                            String(this.props.parent_rent).split(",")[index]
-                          }
-                          disabled
-                        />
-                      </Form.Group>
-                      <Form.Group className="p-0 mr-2" as={Col}>
-                        <FormControl
-                          placeholder={
-                            String(this.props.parent_profession).split(",")[
-                              index
-                            ]
-                          }
-                          disabled
-                        />
-                      </Form.Group>
-                    </>
-                  ) : null}
+                      ).format("YYYY") >=
+                    18 ? (
+                      <>
+                        <Form.Group className="p-0 mr-2" md={2} as={Col}>
+                          <FormControl
+                            placeholder={
+                              String(this.props.parent_rent).split(",")[index]
+                            }
+                            disabled
+                          />
+                        </Form.Group>
+                        <Form.Group className="p-0 mr-2" as={Col}>
+                          <FormControl
+                            placeholder={
+                              String(this.props.parent_profession).split(",")[
+                                index
+                              ]
+                            }
+                            disabled
+                          />
+                        </Form.Group>
+                      </>
+                    ) : null}
 
-                  <Form.Group>
-                    <Button
-                      className="buttonAdd"
-                      onClick={() =>
-                        this.setState(
-                          {
-                            count: this.state.count - 1,
+                    <Form.Group>
+                      <Button
+                        className="buttonAdd"
+                        onClick={() =>
+                          this.setState(
+                            {
+                              count: this.state.count - 1,
 
-                            parent_name: this.state.parent_name.filter(
-                              (e, i) => i !== index
-                            ),
+                              parent_name: this.state.parent_name.filter(
+                                (e, i) => i !== index
+                              ),
 
-                            parent_date_born: this.state.parent_date_born.filter(
-                              (e, i) => i !== index
-                            ),
-                            parent_profession: this.state.parent_profession.filter(
-                              (e, i) => i !== index
-                            ),
+                              parent_date_born: this.state.parent_date_born.filter(
+                                (e, i) => i !== index
+                              ),
+                              parent_profession: this.state.parent_profession.filter(
+                                (e, i) => i !== index
+                              ),
 
-                            parent_rent: this.state.parent_rent.filter(
-                              (e, i) => i !== index
-                            ),
-                          },
-                          () => {
-                            this.props.onChange(this.state);
-                          }
-                        )
-                      }
-                    >
-                      <img src={remove}></img>
-                    </Button>
-                  </Form.Group>
-                  <Form.File.Input />
-                </InputGroup>
+                              parent_rent: this.state.parent_rent.filter(
+                                (e, i) => i !== index
+                              ),
+
+                              documentsparent: this.state.documentsparent.filter(
+                                (e, i) => i !== index
+                              ),
+                            },
+                            () => {
+                              this.props.onChange(this.state);
+                            }
+                          )
+                        }
+                      >
+                        <img src={remove}></img>
+                      </Button>
+                    </Form.Group>
+                  </InputGroup>
+                  <ButtonAnnex
+                    value={index + 1}
+                    name="documentsparent"
+                    documents={this.state.documentsparent}
+                    Upload={this.props.Upload}
+                    handleChange={this.handleChangeButton}
+                    FileChange={this.onChange}
+                  ></ButtonAnnex>
+                </>
               );
             })}
             <Form.Group>
               <Form.Label>MOTIVAÇÃO PARA SER BOLSISTA</Form.Label>
+
               <Form.Control
                 as="textarea"
                 name="motivation"
@@ -570,70 +582,73 @@ class FormSubmited extends React.Component {
             </Form.Group>
             <ButtonAnnex
               value="1"
-              documents={this.props.documents}
+              name="documents"
+              documents={this.state.documents}
               Upload={this.props.Upload}
               handleChange={this.handleChangeButton}
               FileChange={this.onChange}
-            >
-              dd
-            </ButtonAnnex>
+            ></ButtonAnnex>
             {this.state.quiz[3] == 2 ? (
-              <Form.Group
-                name="campus_city_housing"
-                value={this.state.campus_city_housing}
-                onClick={this.handleChange}
-              >
-                <Form.Label>
-                  CASO VOCÊ RESIDA NA CIDADE DO CAMPUS ONDE ESTÁ MATRICULADO,
-                  QUAL A SUA SITUAÇÃO ATUAL DE MORADIA?
-                </Form.Label>
-                <Col>
-                  <Form.Check
-                    type="radio"
-                    required
-                    label="Não moro na cidade do campus "
-                    name="campus_city_housing"
-                    value="1"
-                    defaultChecked={this.state.campus_city_housing === 1}
-                  />
-                  <Form.Check
-                    type="radio"
-                    label="Sozinho "
-                    name="campus_city_housing"
-                    value="2"
-                    defaultChecked={this.state.campus_city_housing === 2}
-                  />
-                  <Form.Check
-                    type="radio"
-                    label="Com amigos "
-                    name="campus_city_housing"
-                    value="3"
-                    defaultChecked={this.state.campus_city_housing === 3}
-                  />
-                  <Form.Check
-                    type="radio"
-                    label="Com familiares ou parentes "
-                    name="campus_city_housing"
-                    value="4"
-                    defaultChecked={this.state.campus_city_housing === 4}
-                  />
-                  <Form.Check
-                    type="radio"
-                    label="Em moradia estudantil, casa do estudante ou similares "
-                    name="campus_city_housing"
-                    value="5"
-                    defaultChecked={this.state.campus_city_housing === 5}
-                  />
-                  <Form.Check
-                    type="radio"
-                    label="Em pensão ou pensionato"
-                    name="campus_city_housing"
-                    value="6"
-                    defaultChecked={this.state.campus_city_housing === 6}
-                  />
-                </Col>
+              <>
+                <Form.Group
+                  name="campus_city_housing"
+                  value={this.state.campus_city_housing}
+                  onClick={this.handleChange}
+                >
+                  <Form.Label>
+                    CASO VOCÊ RESIDA NA CIDADE DO CAMPUS ONDE ESTÁ MATRICULADO,
+                    QUAL A SUA SITUAÇÃO ATUAL DE MORADIA?
+                  </Form.Label>
+                  <Col>
+                    <Form.Check
+                      type="radio"
+                      required
+                      label="Não moro na cidade do campus "
+                      name="campus_city_housing"
+                      value="1"
+                      defaultChecked={this.state.campus_city_housing === 1}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Sozinho "
+                      name="campus_city_housing"
+                      value="2"
+                      defaultChecked={this.state.campus_city_housing === 2}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Com amigos "
+                      name="campus_city_housing"
+                      value="3"
+                      defaultChecked={this.state.campus_city_housing === 3}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Com familiares ou parentes "
+                      name="campus_city_housing"
+                      value="4"
+                      defaultChecked={this.state.campus_city_housing === 4}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Em moradia estudantil, casa do estudante ou similares "
+                      name="campus_city_housing"
+                      value="5"
+                      defaultChecked={this.state.campus_city_housing === 5}
+                    />
+                    <Form.Check
+                      type="radio"
+                      label="Em pensão ou pensionato"
+                      name="campus_city_housing"
+                      value="6"
+                      defaultChecked={this.state.campus_city_housing === 6}
+                    />
+                  </Col>
+                </Form.Group>
+
                 <ButtonAnnex
                   value="2"
+                  name="documents"
                   documents={this.props.documents}
                   Upload={this.props.Upload}
                   handleChange={this.handleChangeButton}
@@ -641,7 +656,7 @@ class FormSubmited extends React.Component {
                 >
                   dd
                 </ButtonAnnex>
-              </Form.Group>
+              </>
             ) : (
               () => {
                 this.campus_city_housing = 0;
@@ -690,6 +705,7 @@ class FormSubmited extends React.Component {
             {this.annex_social_program ? (
               <ButtonAnnex
                 value="3"
+                name="documents"
                 documents={this.props.documents}
                 Upload={this.props.Upload}
                 handleChange={this.handleChangeButton}
@@ -739,6 +755,7 @@ class FormSubmited extends React.Component {
             {this.annex_bpc ? (
               <ButtonAnnex
                 value="4"
+                name="documents"
                 documents={this.props.documents}
                 Upload={this.props.Upload}
                 handleChange={this.handleChangeButton}
@@ -791,6 +808,7 @@ class FormSubmited extends React.Component {
             {this.annex_chronic_disease ? (
               <ButtonAnnex
                 value="5"
+                name="documents"
                 documents={this.props.documents}
                 Upload={this.props.Upload}
                 handleChange={this.handleChangeButton}
@@ -841,6 +859,7 @@ class FormSubmited extends React.Component {
             </Form.Group>
             <ButtonAnnex
               value="6"
+              name="documents"
               documents={this.props.documents}
               Upload={this.props.Upload}
               handleChange={this.handleChangeButton}
@@ -891,6 +910,7 @@ class FormSubmited extends React.Component {
             {this.annex_degree ? (
               <ButtonAnnex
                 value="7"
+                name="documents"
                 documents={this.props.documents}
                 Upload={this.props.Upload}
                 handleChange={this.handleChangeButton}
@@ -1032,6 +1052,7 @@ class FormSubmited extends React.Component {
             {this.annex_paid_activity ? (
               <ButtonAnnex
                 value="8"
+                name="documents"
                 documents={this.props.documents}
                 Upload={this.props.Upload}
                 handleChange={this.handleChangeButton}
@@ -1080,7 +1101,7 @@ class FormSubmited extends React.Component {
             className="Button"
             variant="primary"
             onClick={this.Edit}
-            disabled={this.FormValidated}
+            // disabled={this.FormValidated}
           >
             SALVAR
           </Button>

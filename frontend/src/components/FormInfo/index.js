@@ -154,7 +154,7 @@ class FormInfo extends React.Component {
                   <img src={add}></img>
                 </Button>
               </Form.Group>
-              {this.state.aid_name.lenght > 0 ? 1 : this.state.aid_name.lenght}
+              {/* {this.state.aid_name.lenght > 0 ? 1 : this.state.aid_name.lenght} */}
             </InputGroup>
             {/* {Array.from(this.state.process.aid_name)} */}
             {this.state.aid_name.map((currElement, index) => {
@@ -205,7 +205,7 @@ class FormInfo extends React.Component {
               className="Button"
               variant="primary"
               onClick={this.Edit}
-              disabled={this.FormValidated ? false : true}
+              disabled={this.FormValidated ? true : false}
             >
               EDITAR
             </Button>

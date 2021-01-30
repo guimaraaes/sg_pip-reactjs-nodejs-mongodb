@@ -112,8 +112,7 @@ class Head extends React.Component {
               </Button>
             </>
           )}
-
-          {this.props.action == "new" ? (
+          {this.props.student_mode ? null : this.props.action == "new" ? (
             <Button>
               <a href="/new-process">
                 cadastrar <Image src={add}></Image>

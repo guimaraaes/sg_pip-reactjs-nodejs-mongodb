@@ -6,7 +6,8 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 class ButtonAnnex extends React.Component {
   constructor(props) {
     super(props);
-    this.value = this.props.value - 1;
+    this.value = Number(this.props.value) - 1;
+    this.name = this.props.name;
     this.Upload = this.props.Upload.bind(this);
     this.handleChange = this.props.handleChange.bind(this);
     this.FileChange = this.props.FileChange.bind(this);
@@ -15,10 +16,12 @@ class ButtonAnnex extends React.Component {
   render() {
     return (
       <>
+        {/* {this.props.documents} */}
         {this.props.documents[this.value] ? (
           <>
             <Button
               value={this.value}
+              name={this.name}
               variant="danger"
               onClick={() => {
                 confirmAlert({
@@ -28,8 +31,8 @@ class ButtonAnnex extends React.Component {
                     {
                       label: "Sim",
                       onClick: () => {
-                        this.props.documents[this.value] = null;
-                        this.props.handleChange(this.props.documents);
+                        this.props.documents[this.value] = 0;
+                        this.props.handleChange(this.state);
                       },
                     },
                     {
@@ -53,7 +56,11 @@ class ButtonAnnex extends React.Component {
           </>
         ) : (
           <>
-            <Button value={this.value} onClick={this.props.Upload}>
+            <Button
+              value={this.value}
+              name={this.name}
+              onClick={this.props.Upload}
+            >
               Cadastrar
             </Button>
             <input type="file" name="file" onChange={this.props.FileChange} />

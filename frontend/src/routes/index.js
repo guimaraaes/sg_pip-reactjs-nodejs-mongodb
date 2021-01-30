@@ -16,7 +16,7 @@ export default function Routes() {
         <Route path="/process/:_id" exact component={Process} />
         <Route path="/old-process" exact component={ProcessFinished} />
         <Route
-          path="/student-request/:id_process/:_id"
+          path="/student-request/:id_process/:_id?"
           exact
           component={StudentRequest}
         />
